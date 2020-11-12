@@ -2,18 +2,12 @@ import React, {useState} from 'react';
 import './App.css';
 import Navigation from './Nav';
 
-function Catalogue() {
+function ProfilC() {
     return (
         <div>
         <Navigation/>
-
-
-
-
-        
         </div>
     );
 }
 
-export default Catalogue;
-
+export default ProfilC;

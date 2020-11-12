@@ -1,4 +1,3 @@
-
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
@@ -40,7 +39,6 @@ router.post('/sign-up', async function (req, res, next) {
   ) {
     error.push('veuillez compléter les champs vides !')
   }
-
 
   // SIGNUP CAVISTES
   const dataCaviste = await CavisteModel.findOne({
@@ -118,16 +116,19 @@ router.post('/sign-in', async function (req, res, next) {
   if (req.body.emailFromFront == ''
     || req.body.passwordFromFront == ''
   ) {
-    error.push('veuillez compléter les champs vides !')
+    error.push('Veuillez compléter les champs vides !')
   }
 
   if (error.length == 0) {
-
 
     // SIGN-IN CAVISTES 
     const userCaviste = await CavisteModel.findOne({
       Email: req.body.emailFromFront,
     })
+
+    if(!userCaviste){
+      error.push('email incorrect')
+    }
 
     if (userCaviste) {
       const passwordEncrypt = SHA256(req.body.passwordFromFront + userCaviste.salt).toString(encBase64)
@@ -138,10 +139,9 @@ router.post('/sign-in', async function (req, res, next) {
         status = userCaviste.Status
       } else {
         result = false
-        error.push('mot de passe ou email incorrect')
+        error.push('mot de passe incorrect')
       }
     }
-
 
     // SIGN-IN VIGNERONS
     const userVigneron = await VigneronModel.findOne({
@@ -615,11 +615,12 @@ router.get('/info-c', async function (req, res, next) {
 
 // ------------------------- CATALOGUE CAVISTE ------------------------- \\
 
-router.get('/catalogue', async function (req, res, next) {
+router.get('/catalogue/:token', async function (req, res, next) {
 
   const userCaviste = await CavisteModel.findOne({
-    token: req.query.token
+    token: req.params.token
   })
+  console.log(userCaviste)
 
   var catalogue = await BouteilleModel.find()
     .populate('IdVigneron')
