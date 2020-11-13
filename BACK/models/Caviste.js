@@ -12,8 +12,10 @@ var FavorisSchema = mongoose.Schema ({
     
     NomVi: String, 
     RegionVi: String, 
+    DomaineVi: String,
     DescVi: String,
     PhotoVi: String,
+    VilleVi: String,
 })
 
 var MessageSentSchema = mongoose.Schema ({

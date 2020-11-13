@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Accueil from "./Sraccueil";
 
 // import MessagerieC from '../SrmessagerieC';
-// import FavorisC from '../SrfavorisC';
+import FavorisC from './SrC/SrfavorisC';
 // import ProfilC from '../SrprofilC';
 import CatalogueC from './SrC/SrcatalogueC';
 
@@ -35,7 +35,7 @@ function App() {
         <Switch>
           <Route component={Accueil} path="/" exact />
           {/* <Route component={MessagerieC} path="/SrmessagerieC" exact /> */}
-          {/* <Route component={FavorisC} path="/SrfavorisC" exact /> */}
+          <Route component={FavorisC} path="/SrfavorisC" exact />
           {/* <Route component={ProfilC} path="/SrprofilC" exact /> */}
           <Route component={CatalogueC} path="/SrcatalogueC" exact />
 

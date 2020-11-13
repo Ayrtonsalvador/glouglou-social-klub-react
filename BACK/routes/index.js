@@ -70,7 +70,6 @@ router.post('/sign-up', async function (req, res, next) {
     }
   }
 
-
   // SIGNUP VIGNERONS
   const dataVigneron = await VigneronModel.findOne({
     Email: req.body.emailFromFront
@@ -283,10 +282,6 @@ router.delete('/delete-favoris/:Nom/:Token', async function (req, res, next) {
     token: req.params.Token
   }, { Favoris: neFa })
 
-  const user = await CavisteModel.findOne({
-    token: req.params.Token
-  })
-
   res.json({ updateCaviste })
 });
 
@@ -296,8 +291,6 @@ router.post('/info-update-v', async function (req, res, next) {
 
   var userinfosFB = JSON.parse(req.body.userinfos)
   var image = req.files.avatar
-
-  // console.log(image.size)
 
   if (image.size == 0) {
 
@@ -620,7 +613,6 @@ router.get('/catalogue/:token', async function (req, res, next) {
   const userCaviste = await CavisteModel.findOne({
     token: req.params.token
   })
-  console.log(userCaviste)
 
   var catalogue = await BouteilleModel.find()
     .populate('IdVigneron')
@@ -641,25 +633,32 @@ router.post('/add-favoris', async function (req, res, next) {
   })
 
   const bouteille = await BouteilleModel.findOne({
-    id: req.body.IdFF
+    _id: req.body.IdFF
   })
- 
+
+  const vigneron = await VigneronModel.findOne({
+    _id: req.body.IdViFF
+  })
+
    var favorisCaviste = await CavisteModel.updateOne(
     { token: req.body.tokenFF }, {
     $push: {
       Favoris:
-      {
-        Nom: req.body.NomFF,
-        Couleur: req.body.CouleurFF,
-        Millesime: req.body.MillesimeFF,
-        Cepage: req.body.CepageFF,
-        Desc: req.body.DescFF,
-        AOC: req.body.AOCFF,
-        Photo: req.body.PhotoFF,
-        NomVi: req.body.NomViFF,
-        RegionVi: req.body.RegionViFF,
-        DescVi: req.body.DescViFF,
-        PhotoVi: req.body.PhotoViFF,
+      { 
+        Nom: bouteille.Nom,
+        Couleur: bouteille.Couleur,
+        Millesime: bouteille.Milesime,
+        Cepage: bouteille.Cepage,
+        Desc: bouteille.Desc,
+        AOC: bouteille.AOC,
+        Photo: bouteille.Photo,
+
+        NomVi: vigneron.Nom,
+        RegionVi: vigneron.Region,
+        DescVi: vigneron.Desc,
+        PhotoVi: vigneron.Photo,
+        DomaineVi: vigneron.Domaine,
+        VilleVi : vigneron.Ville
       },
     }
   })
@@ -671,13 +670,14 @@ router.post('/add-favoris', async function (req, res, next) {
   }
 })
 
-router.get('/favoris', async function (req, res, next) {
+router.get('/favoris/:token', async function (req, res, next) {
 
-  var favCaviste = await CavisteModel.findOne({ token: req.query.token })
-  // console.log(favCaviste)
+  var favCaviste = await CavisteModel.findOne({ token: req.params.token })
+  console.log("FAVORIS", favCaviste);
 
   if (favCaviste != null) {
     res.json({ result: true, favCaviste })
+
   } else {
     res.json({ result: false })
   }

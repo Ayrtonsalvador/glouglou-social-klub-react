@@ -1,79 +1,94 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import { createMuiTheme } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import Fab from '@material-ui/core/Fab';
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
-import { Link } from 'react-router-dom'
 
 function NavigationC() {
 
-    const [isOpen, setIsOpen] = useState(false);
+    const classes = useStyles();
 
-    const toggle = () => setIsOpen(!isOpen);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+  
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
 
     return (
-        <div>
-            <Navbar style={{ backgroundColor: '#FDD80B',  }} light expand="md">
-                <Link to="/">
-                    <NavbarBrand><img src="/Plantravail.png" alt="GGSC" style={{ width: 50, height: 50, marginLeft: 30, marginRight: 30 }} /> </NavbarBrand>
+        <div className={classes.root}>
+        <AppBar position="static" color="#FFFFFF">
+          <Toolbar>
+
+            <div className={classes.title}>
+            <Typography  variant="h6" >
+            <Link to='/SrcatalogueC' style={{ textDecoration: 'none', color:"#fdd835", marginRight:20}}>
+              Catalogue
+              </Link>
+            </Typography>
+
+            <Typography  variant="h6" >
+            <Link to='/SrfavorisC' style={{ textDecoration: 'none', color:"#fdd835", marginRight:20}}>
+              Mes favoris
+              </Link>
+            </Typography>
+
+             <Typography variant="h6" >
+            <Link to='/SrmessagerieC' style={{ textDecoration: 'none', color:"#fdd835", marginRight:20}}>    
+              Mes messages
+              </Link>
+            </Typography>          
+            </div>
+
+            <Button style={{ color:"#fdd835"}} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+            Mon profil
+            </Button>
+            <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+            >
+                <Link to='/SrprofilC' style={{ textDecoration: 'none', color:"black"}}>
+                <MenuItem onClick={handleClose}>Parametres</MenuItem>
                 </Link>
-                <NavbarToggler onClick={toggle} />
-                <Collapse isOpen={isOpen} navbar>
+                <MenuItem onClick={handleClose}>Déconnexion</MenuItem>
+            </Menu>
+                    
+          </Toolbar>
+        </AppBar>
+      </div>
 
-                    <Nav style={styles.nav}>
-                        <NavItem>
-                            <NavLink to="/SrprofilC" style={{ padding: 10, fontWeight: 'bold', marginRight: 20, backgroundColor: "#333333", borderRadius: 5, color: "#FFFFFF" }}>Mon profil
-                            </NavLink>
-                        </NavItem>
-
-                        <NavItem>
-                            <NavLink to="/SrcatalogueC"
-                                style={{ padding: 10, fontWeight: 'bold', marginRight: 20, backgroundColor: "#333333", borderRadius: 5, color: "#FFFFFF" }}>Catalogue
-                            </NavLink>
-                        </NavItem>
-
-                        <NavItem>
-                            <NavLink to="/SrmessagerieC"
-                                 style={{ padding: 10, fontWeight: 'bold', marginRight: 20, backgroundColor: "#333333", borderRadius: 5, color: "#FFFFFF" }}>Ma Messagerie
-                            </NavLink>
-                        </NavItem>
-
-                        <NavItem>
-                            <NavLink to="/SrmessagerieC"
-                                 style={{ padding: 10, fontWeight: 'bold', marginRight: 20, backgroundColor: "#333333", borderRadius: 5, color: "#FFFFFF" }}>Déconnexion
-                            </NavLink>
-                        </NavItem>
-
-
-                    </Nav>
-                </Collapse>
-            </Navbar>
-        </div>
     );
+
 }
 
-const styles = ({
-    nav: {
-        alignItems: 'center',
-        justifyContent: 'center',
+const useStyles = makeStyles((theme) => ({
+    root: {
+      flexGrow: 1,
     },
-})
+    title: {
+      flexGrow: 1,
+      display:"flex",
+      flexDirection:"row",
+      justifyContent:"flex-start"
+    },
+  }));
+
 
 export default NavigationC;
-
-
-                        {/* <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                Options
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>
-                  Option 1
-                </DropdownItem>
-                <DropdownItem>
-                  Option 2
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>
-                  Reset
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown> */}

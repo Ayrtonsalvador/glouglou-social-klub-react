@@ -1,70 +1,73 @@
 import React, { useState } from 'react';
-import {
-    Card, CardImg, CardText, CardBody,
-    CardTitle, CardSubtitle, Button,
-    Form, FormGroup, Label, Input, Container, FormText, Row, Col,
-    Carousel,
-    CarouselItem,
-    CarouselControl,
-    CarouselIndicators,
-    CarouselCaption
-} from 'reactstrap';
-// import Icon from '@mdi/react'
-// import { mdiInstagram } from '@mdi/js';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+
+import { Container, Row, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import SwipeableViews from 'react-swipeable-views';
+import { autoPlay } from 'react-swipeable-views-utils';
+
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+
+import NavigationC from "./SrC/NavigationC"
+import NavigationV from "./SrV/NavigationV"
 
 import { connect } from 'react-redux';
-
 import { Redirect } from 'react-router-dom'
 
 function Accueil({ addStatus, addToken, userstatus }) {
 
+    const classes = useStyles();
+    const [index, setIndex] = useState(0);
+
     // -------------CARROUEL------------- \\
-    const items = [
-        {
-            id: 1,
-            altText: 'BOIRE BIEN, BOIRE MIEUX',
-            caption: 'Notre "équipe propose une selections de vins naturels et biodynamiques provenant de petits producteurs indépendants.'
+    const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+
+    const tutorialSteps = [
+        {  id: 1,
+            label: 'BOIRE BIEN, BOIRE MIEUX',
+            para: 'Notre équipe propose une selections de vins naturels et biodynamiques provenant de petits producteurs indépendants.',
         },
-        {
-            id: 2,
-            altText: 'CÔTÉ VIGNERONS',
-            caption: 'Nous participons au développement des producteurs indépendants grâce à notre catalogue de références à disposition des cavistes.'
+        { id: 2,
+            label: 'CÔTÉ VIGNERONS',
+            para: 'Nous participons au développement des producteurs indépendants grâce à notre catalogue de références à disposition des cavistes.',
         },
-        {
-            id: 3,
-            altText: 'CÔTÉ CAVISTES',
-            caption: 'Nous aidons les restaurateurs à étoffer leur carte grâce à une présélection de références de petits producteurs.'
-        }
+        {id: 3,
+            label: 'CÔTÉ CAVISTES',
+            para: 'Nous aidons les restaurateurs à étoffer leur carte grâce à une présélection de références de petits producteurs.',
+        },
     ];
+    const theme = useTheme();
+    const [activeStep, setActiveStep] = React.useState(0);
+    const maxSteps = tutorialSteps.length;
 
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [animating, setAnimating] = useState(false);
+    const handleStepChange = (step) => {
+        setActiveStep(step);
+    };
 
-    const next = () => {
-        if (animating) return;
-        const nextIndex = activeIndex === items.length - 1 ? 0 : activeIndex + 1;
-        setActiveIndex(nextIndex);
-    }
+    // -------------MODAL------------- \\
+    const [opensignin, setOpenSignIn] = React.useState(false);
+    const [opensignup, setOpenSignUp] = React.useState(false);
 
-    const previous = () => {
-        if (animating) return;
-        const nextIndex = activeIndex === 0 ? items.length - 1 : activeIndex - 1;
-        setActiveIndex(nextIndex);
-    }
 
-    const slides = items.map((item) => {
-        return (
-            <CarouselItem
-                className="custom-tag"
-                tag="div"
-                key={item.id}
-                onExiting={() => setAnimating(true)}
-                onExited={() => setAnimating(false)}
-            >
-                <CarouselCaption style={{ padding: 0, fontSize: 20 }} className="text-warning" captionText={item.caption} captionHeader={item.altText} />
-            </CarouselItem>
-        );
-    });
+    const handleOpenSignIn = () => {
+        setOpenSignIn(true);
+    };
+    const handleOpenSignUp = () => {
+        setOpenSignUp(true);
+    };
+
+    const handleCloseSignIn = () => {
+        setOpenSignIn(false);
+    };
+
+    const handleCloseSignUp = () => {
+        setOpenSignUp(false);
+    };
 
     // -------------INSCRIPTION------------ \\
     const [signUpUsername, setSignUpUsername] = useState('')
@@ -92,7 +95,6 @@ function Accueil({ addStatus, addToken, userstatus }) {
             setErrorsSignup(response.error)
         }
     }
-
 
     var SubmitSignupC = async () => {
 
@@ -126,8 +128,7 @@ function Accueil({ addStatus, addToken, userstatus }) {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `emailFromFront=${signInEmail}&passwordFromFront=${signInPassword}`
         })
-        var response = await rawResponse.json()
-        console.log(response)
+        var response = await rawResponse.json();
 
         if (response.result == true) {
             addStatus(response.status);
@@ -163,129 +164,131 @@ function Accueil({ addStatus, addToken, userstatus }) {
     }
 
     return (
-        <Container style={styles.container} fluid={true}>
-            <Row style={styles.row}>
-                <Col lg='4'>
-                    <Card style={styles.form}>
-                        <div className="d-flex justify-content-center">
-                            <CardImg top style={{ width: '80%' }} src="GGSC.png" alt="GGSC logo" />
-                        </div>
-                        <CardBody style={{ padding: 0 }}>
-                            <style>
-                                {
-                                    `.custom-tag {
-                                width: 100%;
-                                height: 300px;
-                                background: white;
-                                padding: 5,
-                                }`
-                                }
-                            </style>
-                            <Carousel
-                                activeIndex={activeIndex}
-                                next={next}
-                                previous={previous}
+        <Container fluid={true} style={{ width: "100%", height: "100vh", backgroundColor: "#000000" }}>
+
+            <Paper style={{ backgroundColor: "#000000", height: "15%" }} className={classes.paper}></Paper>
+
+            <Grid container direction="row"
+                justify="center"
+                alignItems="center"
+                spacing={8} >
+
+                <Grid item xs={5} >
+                    <Paper style={{ backgroundColor: "#000000" }} className={classes.paper}>
+                        <img src="GGSCb.png" style={{ width: "80%", height: "80%" }} />
+                    </Paper>
+                </Grid>
+
+                <Grid item xs={3} direction="colmun" justify="center" alignItems="center">
+                    <AutoPlaySwipeableViews
+                        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                        index={activeStep}
+                        onChangeIndex={handleStepChange}
+                        enableMouseEvents
+                    >
+                        {tutorialSteps.map((step, index) => (
+                                <div style={{ color: "#FFFFFF", paddingBottom: 20 }} >
+                                    {Math.abs(activeStep - index) <= 2 ? (
+                                        <div> <h4>{step.label}</h4><p> {step.para} </p> </div>
+                                    ) : null}
+                                </div>
+                        ))}
+                    </AutoPlaySwipeableViews>
+
+                    <Grid container direction="row" alignItems="center" >
+                        <Grid>
+                            <Button style={{ backgroundColor: "#fdd835", color: "#FFFFFF", marginTop: 20 }} variant="outlined" color="primary" onClick={handleOpenSignIn}>Connexion</Button>
+                            <Modal
+                                aria-labelledby="transition-modal-title"
+                                aria-describedby="transition-modal-description"
+                                className={classes.modal}
+                                open={opensignin}
+                                onClose={handleCloseSignIn}
+                                closeAfterTransition
+                                BackdropComponent={Backdrop}
+                                BackdropProps={{
+                                    timeout: 500,
+                                }}
                             >
-                                {slides}
-                            </Carousel>
+                                <Fade in={opensignin}>
+                                    <div className={classes.papermodal}>
+                                        <h3 id="transition-modal-title">J'ai un compte</h3>
+                                        <Form>
+                                            <FormGroup>
+                                                <Input invalid={invalid} type="email" name="email" id="Email" placeholder="@Glouglou.com"
+                                                    onChange={(e) => setSignInEmail(e.target.value)} />
+                                            </FormGroup>
+                                            <FormGroup>
+                                                <Input invalid={invalid} type="password" name="password" id="Password" placeholder="Mot de passe"
+                                                    onChange={(e) => setSignInPassword(e.target.value)} />
+                                            </FormGroup>
+                                            {tabErrorsSignin}
+                                            <Button style={{ marginTop: 10, backgroundColor: "#fdd835", color: "#FFFFFF" }} onClick={() => SubmitSignin()}>OK</Button>
+                                        </Form>
+                                    </div>
+                                </Fade>
+                            </Modal>
+                        </Grid>
 
-                            <div className="d-flex flex-row">
-                                {/* <Link href="https://www.instagram.com/glouglou.socialclub/?hl=fr"> */}
-                                {/* <Icon path={mdiInstagram}
-                                    size={1.5}
-                                    horizontal
-                                    vertical
-                                    rotate={90}
-                                    color="black"
-                                    spin={false} /> */}
-                                <CardText style={{ padding: 0, marginTop: 5, marginLeft: 5 }}>@GlouglouSocialClub</CardText>
-                                {/* </Link> */}
-                            </div>
-                        </CardBody>
-                    </Card>
-                </Col>
+                        <Grid>
+                            <Button style={{ marginLeft: 20, marginTop: 20, color: "#FFFFFF" }} variant="outlined" onClick={handleOpenSignUp}>Je m'inscris</Button>
+                            <Modal
+                                aria-labelledby="transition-modal-title"
+                                aria-describedby="transition-modal-description"
+                                className={classes.modal}
+                                open={opensignup}
+                                onClose={handleCloseSignUp}
+                                closeAfterTransition
+                                BackdropComponent={Backdrop}
+                                BackdropProps={{
+                                    timeout: 500,
+                                }}
+                            >
+                                <Fade in={opensignup}>
+                                    <div className={classes.papermodal}>
+                                        <h3 id="transition-modal-title">Je créé mon compte</h3>
 
-                <Col lg='3'>
-                    <Form style={styles.form} >
-                        <Label style={styles.label}>Je m'inscris</Label>
+                                        <Form>
+                                            <FormGroup>
+                                                <Input type="pseudo" name="pseudo" id="Pseudo" placeholder="Nom Prénom"
+                                                    onChange={(e) => setSignUpUsername(e.target.value)} />
+                                            </FormGroup>
 
-                        <FormGroup>
-                            <Input type="pseudo" name="pseudo" id="Pseudo" placeholder="Nom Prénom"
-                                onChange={(e) => setSignUpUsername(e.target.value)} />
-                        </FormGroup>
+                                            <FormGroup>
+                                                <Input type="email" name="" id="Email" placeholder="@Glouglou.com"
+                                                    onChange={(e) => setSignUpEmail(e.target.value)} />
+                                            </FormGroup>
 
-                        <FormGroup>
-                            <Input type="email" name="" id="Email" placeholder="@Glouglou.com"
-                                onChange={(e) => setSignUpEmail(e.target.value)} />
-                        </FormGroup>
+                                            <FormGroup>
+                                                <Input type="telephone" name="" id="Telephone" placeholder="Telephone"
+                                                    onChange={(e) => setSignUpTel(e.target.value)} />
+                                            </FormGroup>
 
-                        <FormGroup>
-                            <Input type="telephone" name="" id="Telephone" placeholder="Telephone"
-                                onChange={(e) => setSignUpTel(e.target.value)} />
-                        </FormGroup>
+                                            <FormGroup>
+                                                <Input type="password" name="password" id="examplePassword" placeholder="Mot de passe"
+                                                    onChange={(e) => setSignUpPassword(e.target.value)} />
+                                            </FormGroup>
+                                            {tabErrorsSignup}
+                                            <FormText>Je suis :</FormText>
 
-                        <FormGroup>
-                            <Input type="password" name="password" id="examplePassword" placeholder="Mot de passe"
-                                onChange={(e) => setSignUpPassword(e.target.value)} />
-                        </FormGroup>
-                        {tabErrorsSignup}
-                        <FormText>Tu es :</FormText>
-                        <div className="d-flex justify-content-center">
+                                            <Button style={{ marginTop: 10, backgroundColor: "#fdd835", color: "#FFFFFF" }} onClick={() => SubmitSignupV()}>VIGNERON</Button>
+                                            <Button style={{ marginTop: 10, marginLeft: 20, backgroundColor: "#fdd835", color: "#FFFFFF" }} onClick={() => SubmitSignupC()}>CAVISTE</Button>
 
-                            <Button style={styles.button} onClick={() => SubmitSignupV()}>VIGNERON</Button>
-                            <Button style={styles.button} onClick={() => SubmitSignupC()}>CAVISTE</Button>
+                                        </Form>
 
-                        </div>
-                    </Form>
-                </Col>
+                                    </div>
+                                </Fade>
+                            </Modal>
 
-                <Col lg='3'>
-                    <Form style={styles.form} >
-                        <Label style={styles.label} >Je m'identifie</Label>
-                        <FormGroup>
-                            <Input invalid={invalid} type="email" name="email" id="Email" placeholder="@Glouglou.com"
-                                onChange={(e) => setSignInEmail(e.target.value)} />
-                        </FormGroup>
-                        <FormGroup>
-                            <Input invalid={invalid} type="password" name="password" id="Password" placeholder="Mot de passe"
-                                onChange={(e) => setSignInPassword(e.target.value)} />
-                        </FormGroup>
-                        {tabErrorsSignin}
-                        <Button onClick={() => SubmitSignin()}>OK</Button>
-                    </Form>
-                </Col>
+                        </Grid>
 
-            </Row>
+                    </Grid>
+                </Grid>
+            </Grid>
 
-        </Container >
-
+        </Container>
     );
 }
-
-const styles = ({
-    label: {
-        backgroundColor: "#FFFFFF",
-    },
-    container: {
-        backgroundColor: "#FDD80B",
-        height: 'auto',
-    },
-    form: {
-        backgroundColor: "#FFFFFF",
-        borderRadius: 5,
-        padding: 20,
-        margin: 20,
-    },
-    row: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    button: {
-        width: 100,
-        marginLeft: 5,
-        marginRight: 5
-    }
-})
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -297,6 +300,47 @@ function mapDispatchToProps(dispatch) {
         }
     }
 }
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    paper: {
+        padding: theme.spacing(4),
+        textAlign: 'center',
+    },
+    rootC: {
+        maxWidth: 400,
+        flexGrow: 1,
+    },
+    header: {
+        display: 'flex',
+        alignItems: 'center',
+        textAlign: 'center',
+        height: 50,
+        paddingLeft: theme.spacing(4),
+        backgroundColor: 'black',
+    },
+    img: {
+        height: 255,
+        display: 'block',
+        maxWidth: 400,
+        overflow: 'hidden',
+        width: '100%',
+    },
+
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    papermodal: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
+
+}));
 
 function mapStateToProps(state) {
     return { userstatus: state.userstatus, token: state.token }
