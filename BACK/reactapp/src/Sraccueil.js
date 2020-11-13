@@ -19,7 +19,7 @@ import NavigationV from "./SrV/NavigationV"
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom'
 
-function Accueil({ addStatus, addToken, userstatus }) {
+function Accueil({ addStatus, addToken, userstatus, token }) {
 
     const classes = useStyles();
     const [index, setIndex] = useState(0);
@@ -180,6 +180,7 @@ function Accueil({ addStatus, addToken, userstatus }) {
                 </Grid>
 
                 <Grid item xs={3} direction="colmun" justify="center" alignItems="center">
+                    <Grid>
                     <AutoPlaySwipeableViews
                         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                         index={activeStep}
@@ -187,13 +188,14 @@ function Accueil({ addStatus, addToken, userstatus }) {
                         enableMouseEvents
                     >
                         {tutorialSteps.map((step, index) => (
-                                <div style={{ color: "#FFFFFF", paddingBottom: 20 }} >
+                                <div style={{ color: "#FFFFFF", paddingBottom: 20 }} key={step.id}>
                                     {Math.abs(activeStep - index) <= 2 ? (
                                         <div> <h4>{step.label}</h4><p> {step.para} </p> </div>
                                     ) : null}
                                 </div>
                         ))}
                     </AutoPlaySwipeableViews>
+                    </Grid>
 
                     <Grid container direction="row" alignItems="center" >
                         <Grid>
@@ -290,16 +292,7 @@ function Accueil({ addStatus, addToken, userstatus }) {
     );
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        addToken: function (token) {
-            dispatch({ type: 'addToken', token: token })
-        },
-        addStatus: function (status) {
-            dispatch({ type: 'addStatus', status: status })
-        }
-    }
-}
+
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -341,6 +334,17 @@ const useStyles = makeStyles((theme) => ({
     },
 
 }));
+
+function mapDispatchToProps(dispatch) {
+    return {
+        addToken: function (token) {
+            dispatch({ type: 'addToken', token: token })
+        },
+        addStatus: function (status) {
+            dispatch({ type: 'addStatus', status: status })
+        }
+    }
+}
 
 function mapStateToProps(state) {
     return { userstatus: state.userstatus, token: state.token }

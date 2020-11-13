@@ -8,46 +8,55 @@ import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
 import NavigationC from './NavigationC';
 import CardVin from './CardVin';
+import MultipleSelect from './MultipleSelect'
 
 function CatalogueC({ token, sendMessage, message, bouteille }) {
 
-const [listVin, setlistVin] = useState([])
+    const [listVin, setlistVin] = useState([])
 
-// ${token}
-useEffect(() => {
-    async function loadData() {
+    // ${token}
+    useEffect(() => {
+        async function loadData() {
 
-        var rawResponse = await fetch(`/catalogue/47PlPYcfoj7eORElqNzEHYRhWKNRm9vo`);
-        var response = await rawResponse.json();
+            var rawResponse = await fetch(`/catalogue/47PlPYcfoj7eORElqNzEHYRhWKNRm9vo`);
+            var response = await rawResponse.json();
 
-        if (response.result == true) {
-            setlistVin(response.catalogue);
-            console.log(response.catalogue)
+            if (response.result == true) {
+                setlistVin(response.catalogue);
+                console.log(response.catalogue)
+            }
         }
-    }
-    loadData()
-}, []);
+        loadData()
+    }, []);
 
     return (
         <div>
-        <NavigationC/>
-        <Container fluid={true} style={{ width: "100%", height: "auto", backgroundColor: "#FFFFFF" }}>
-           
-            <Grid 
+            <Grid
                 container
-                direction="row"
-                justify="flex-start"
-                alignItems="center"
-                spacing={3}
-            >
-               { listVin.map((bouteille, i) => {
-                    return (
-                        <CardVin key={i} bouteille={bouteille}/>
-                    )
-                })}
-
+                direction="column"
+                alignItems="flex-start" >
+                <NavigationC />
+                <MultipleSelect />
             </Grid>
-        </Container>
+            <Container fluid={true} style={{ width: "100%", height: "auto", backgroundColor: "#f5f5f5" }}>
+                      
+                       <Grid
+                        style={{paddingTop: 40}}
+                        container
+                        direction="row"
+                        justify="flex-start"
+                        // alignItems="flex-start"
+                        spacing={2}
+                        >
+                        {listVin.map((bouteille, i) => {
+                            return (
+                                <CardVin key={i} bouteille={bouteille} />
+                            )
+                        })}
+                        </Grid>
+              
+            </Container>
+
         </div>
     );
 }

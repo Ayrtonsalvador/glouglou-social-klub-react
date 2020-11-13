@@ -34,25 +34,32 @@ function Favoris({ token, favoris }) {
 
     return (
         <div>
-        <NavigationC/>
-        <Container fluid={true} style={{ width: "100%", height: "auto", backgroundColor: "#FFFFFF" }}>
-           
-            <Grid 
-                container
-                direction="row"
-                justify="flex-start"
-                alignItems="center"
-                spacing={3}
-            >
-               { listVin.map((favoris, i) => {
-                    return (
-                        <CardFavoris key={i} favoris={favoris} deleted={deleted} setdeleted={setdeleted}/>
-                    )
-                })}
-
-            </Grid>
+        <Grid
+            container
+            direction="column"
+            alignItems="flex-start" >
+            <NavigationC />
+        </Grid>
+        <Container fluid={true} style={{ width: "100%", height: "100vh", backgroundColor: "#f5f5f5" }}>
+                  
+                   <Grid
+                    style={{paddingTop: 80}}
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    // alignItems="flex-start"
+                    spacing={2}
+                    >
+                    {listVin.map((favoris, i) => {
+                        return (
+                            <CardFavoris key={i} favoris={favoris} />
+                        )
+                    })}
+                    </Grid>
+          
         </Container>
-        </div>
+
+    </div>
     );
 }
 

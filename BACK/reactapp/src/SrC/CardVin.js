@@ -15,9 +15,11 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import MessageIcon from '@material-ui/icons/Share';
+import MessageIcon from '@material-ui/icons/Message';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Fab from '@material-ui/core/Fab';
+
 
 import { connect } from 'react-redux';
 
@@ -25,21 +27,19 @@ function CardVin({ bouteille , token }) {
 
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
-    const [liked, setliked] = useState(false)
+    const [liked, setliked] = useState(true)
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
-    const likedcolor = () => {
-        setliked(!liked);
-    };
-
-    if(liked){
-        var coloricon = red[800]
+    var color = ""
+    if (liked === true){
+         color =  "#CC3300"
       } else {
-        var coloricon = ""
+        color = ""
       }
+    
     //   ${token}
     const addFavoris = async () => {
         var data = await fetch(`/add-favoris`, {
@@ -52,7 +52,7 @@ function CardVin({ bouteille , token }) {
     // -------------MAP CATALOGUE------------- \\  
 
         return (
-            <Grid item xs={3}>
+            <Grid item xs={2}>
                 <Card className={classes.root}>
                     <CardHeader
                         id={bouteille._id}
@@ -74,15 +74,15 @@ function CardVin({ bouteille , token }) {
                     </CardContent>
                     <CardActions disableSpacing>
 
-                        <IconButton color= {coloricon} onClick={addFavoris}  aria-label="add to favorites">
-                            <FavoriteIcon />
-                        </IconButton>
+                    <IconButton onClick={()=>{addFavoris(); setliked(!liked)}} aria-label="Message">
+                                <FavoriteIcon />
+                    </IconButton>
 
                         <IconButton
                             className={clsx(classes.expand, {
                                 [classes.expandOpen]: expanded,
                             })}
-                            onClick={() => {handleExpandClick(); likedcolor()}}
+                            onClick={() => {handleExpandClick()}}
                             aria-expanded={expanded}
                             aria-label="show more"
                         >
@@ -119,7 +119,8 @@ function CardVin({ bouteille , token }) {
 
     const useStyles = makeStyles((theme) => ({
         root: {
-            maxWidth: 345,
+            maxWidth: 250
+        ,
             whiteSpace: 'wrap',
             marginBottom: theme.spacing(1),
         },

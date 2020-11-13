@@ -13,8 +13,9 @@ import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import { connect } from 'react-redux';
 
-function NavigationV() {
+function NavigationV({addToken}) {
 
   const classes = useStyles();
 
@@ -61,7 +62,9 @@ function NavigationV() {
                 <Link to='/SrprofilV' style={{ textDecoration: 'none', color:"black"}}>
                 <MenuItem onClick={handleClose}>Parametres</MenuItem>
                 </Link>
-                <MenuItem onClick={handleClose}>Déconnexion</MenuItem>
+                <Link to='/' style={{ textDecoration: 'none', color:"black"}}>
+                <MenuItem onClick={ () => {handleClose(); addToken("")}}>Déconnexion</MenuItem>
+                </Link>
             </Menu>
 
         </Toolbar>
@@ -84,4 +87,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default NavigationV;
+function mapDispatchToProps(dispatch) {
+  return {
+      addToken: function (token) {
+          dispatch({ type: 'addToken', token: token })
+      },
+  }
+}
+
+export default connect(
+  null,
+  mapDispatchToProps,
+)(NavigationV);

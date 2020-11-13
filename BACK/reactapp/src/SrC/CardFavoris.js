@@ -12,10 +12,11 @@ import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import Fab from '@material-ui/core/Fab';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import MessageIcon from '@material-ui/icons/Share';
+import MessageIcon from '@material-ui/icons/Message';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
@@ -43,7 +44,7 @@ function CardFavoris({ favoris, token, setdeleted, deleted }) {
     // -------------MAP CATALOGUE------------- \\  
 
     return (
-        <Grid item xs={3}>
+        <Grid item xs={2}>
             <Card className={classes.root}>
                 <CardHeader
                     id={favoris._id}
@@ -65,8 +66,8 @@ function CardFavoris({ favoris, token, setdeleted, deleted }) {
                 </CardContent>
                 <CardActions disableSpacing>
 
-                    <IconButton color="#DC143C" onClick={deleteFavoris} aria-label="add to favorites">
-                        <FavoriteIcon />
+                    <IconButton  onClick={deleteFavoris} aria-label="add to favorites">
+                        <FavoriteIcon style={{ color: '#CC3300'}}/>
                     </IconButton>
 
                     <IconButton
@@ -110,7 +111,7 @@ function CardFavoris({ favoris, token, setdeleted, deleted }) {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 345,
+        maxWidth: 250,
         whiteSpace: 'wrap',
         marginBottom: theme.spacing(1),
     },

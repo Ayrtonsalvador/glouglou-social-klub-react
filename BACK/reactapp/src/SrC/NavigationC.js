@@ -13,9 +13,9 @@ import Fab from '@material-ui/core/Fab';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { connect } from 'react-redux';
 
-
-function NavigationC() {
+function NavigationC({addToken}) {
 
     const classes = useStyles();
 
@@ -31,7 +31,7 @@ function NavigationC() {
 
     return (
         <div className={classes.root}>
-        <AppBar position="static" color="#FFFFFF">
+        <AppBar position="fixed" color="#FFFFFF">
           <Toolbar>
 
             <div className={classes.title}>
@@ -67,7 +67,9 @@ function NavigationC() {
                 <Link to='/SrprofilC' style={{ textDecoration: 'none', color:"black"}}>
                 <MenuItem onClick={handleClose}>Parametres</MenuItem>
                 </Link>
-                <MenuItem onClick={handleClose}>Déconnexion</MenuItem>
+                <Link to='/' style={{ textDecoration: 'none', color:"black"}}>
+                <MenuItem onClick={ () => {handleClose(); addToken("")}}>Déconnexion</MenuItem>
+                </Link>
             </Menu>
                     
           </Toolbar>
@@ -91,4 +93,15 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-export default NavigationC;
+  function mapDispatchToProps(dispatch) {
+    return {
+        addToken: function (token) {
+            dispatch({ type: 'addToken', token: token })
+        },
+    }
+}
+
+export default connect(
+    null,
+    mapDispatchToProps,
+)(NavigationC);
