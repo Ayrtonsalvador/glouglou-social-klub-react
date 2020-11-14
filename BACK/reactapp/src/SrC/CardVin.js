@@ -119,7 +119,7 @@ function CardVin({ bouteille , token }) {
 
     const useStyles = makeStyles((theme) => ({
         root: {
-            maxWidth: 250
+            maxWidth: 280
         ,
             whiteSpace: 'wrap',
             marginBottom: theme.spacing(1),

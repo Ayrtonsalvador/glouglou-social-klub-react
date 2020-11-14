@@ -156,11 +156,11 @@ function Accueil({ addStatus, addToken, userstatus, token }) {
     // -------------REDIRECT------------- \\       
 
     if (userExists && userstatus == "Vigneron") {
-        return <Redirect to='/SrcaveV' />
+        return <Redirect to='/CaveV' />
     }
 
     if (userExists && userstatus == "Caviste") {
-        return <Redirect to='/SrcatalogueC' />
+        return <Redirect to='/CatalogueC' />
     }
 
     return (

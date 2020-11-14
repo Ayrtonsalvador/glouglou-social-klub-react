@@ -36,24 +36,23 @@ function NavigationC({addToken}) {
 
             <div className={classes.title}>
             <Typography  variant="h6" >
-            <Link to='/SrcatalogueC' style={{ textDecoration: 'none', color:"#fdd835", marginRight:20}}>
+            <Link to='/CatalogueC' style={{ textDecoration: 'none', color:"#fdd835", marginRight:20}}>
               Catalogue
               </Link>
             </Typography>
 
             <Typography  variant="h6" >
-            <Link to='/SrfavorisC' style={{ textDecoration: 'none', color:"#fdd835", marginRight:20}}>
+            <Link to='/FavorisC' style={{ textDecoration: 'none', color:"#fdd835", marginRight:20}}>
               Mes favoris
               </Link>
             </Typography>
 
              <Typography variant="h6" >
-            <Link to='/SrmessagerieC' style={{ textDecoration: 'none', color:"#fdd835", marginRight:20}}>    
+            <Link to='/MessagerieC' style={{ textDecoration: 'none', color:"#fdd835", marginRight:20}}>    
               Mes messages
               </Link>
             </Typography>          
             </div>
-
             <Button style={{ color:"#fdd835"}} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
             Mon profil
             </Button>
@@ -64,9 +63,10 @@ function NavigationC({addToken}) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <Link to='/SrprofilC' style={{ textDecoration: 'none', color:"black"}}>
+                <Link to='/ProfilC' style={{ textDecoration: 'none', color:"black"}}>
                 <MenuItem onClick={handleClose}>Parametres</MenuItem>
                 </Link>
+
                 <Link to='/' style={{ textDecoration: 'none', color:"black"}}>
                 <MenuItem onClick={ () => {handleClose(); addToken("")}}>Déconnexion</MenuItem>
                 </Link>

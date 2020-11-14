@@ -5,12 +5,12 @@ import 'fontsource-roboto';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
-import Accueil from "./Sraccueil";
+import Accueil from "./Accueil";
 
 // import MessagerieC from '../SrmessagerieC';
-import FavorisC from './SrC/SrfavorisC';
+import FavorisC from './SrC/FavorisC';
 // import ProfilC from '../SrprofilC';
-import CatalogueC from './SrC/SrcatalogueC';
+import CatalogueC from './SrC/CatalogueC';
 
 // import MessagerieV from '../SrmessagerieC';
 import CaveV from './SrV/SrcaveV';
@@ -35,12 +35,12 @@ function App() {
         <Switch>
           <Route component={Accueil} path="/" exact />
           {/* <Route component={MessagerieC} path="/SrmessagerieC" exact /> */}
-          <Route component={FavorisC} path="/SrfavorisC" exact />
+          <Route component={FavorisC} path="/FavorisC" exact />
           {/* <Route component={ProfilC} path="/SrprofilC" exact /> */}
-          <Route component={CatalogueC} path="/SrcatalogueC" exact />
+          <Route component={CatalogueC} path="/CatalogueC" exact />
 
           {/* <Route component={MessagerieV} path="/SrmessagerieV" exact /> */}
-          <Route component={CaveV} path="/SrcaveV" exact />
+          <Route component={CaveV} path="/CaveV" exact />
           {/* <Route component={ProfilV} path="/SrprofilV" exact /> */}
           {/* <Route component={BouteilleV} path="/SrbouteilleV" exact /> */}
         </Switch>

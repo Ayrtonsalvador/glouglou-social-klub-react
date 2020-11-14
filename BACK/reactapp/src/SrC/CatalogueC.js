@@ -4,7 +4,6 @@ import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 
-
 import { connect } from 'react-redux';
 import NavigationC from './NavigationC';
 import CardVin from './CardVin';
@@ -13,7 +12,8 @@ import MultipleSelect from './MultipleSelect'
 function CatalogueC({ token, sendMessage, message, bouteille }) {
 
     const [listVin, setlistVin] = useState([])
-
+    const [reload, setreload] = useState(false)
+    
     // ${token}
     useEffect(() => {
         async function loadData() {
@@ -23,11 +23,10 @@ function CatalogueC({ token, sendMessage, message, bouteille }) {
 
             if (response.result == true) {
                 setlistVin(response.catalogue);
-                console.log(response.catalogue)
             }
         }
         loadData()
-    }, []);
+    }, [reload]);
 
     return (
         <div>
@@ -36,12 +35,12 @@ function CatalogueC({ token, sendMessage, message, bouteille }) {
                 direction="column"
                 alignItems="flex-start" >
                 <NavigationC />
-                <MultipleSelect />
+                <MultipleSelect listVin={listVin} setlistVin={setlistVin} reload={reload} setreload={setreload}/>
             </Grid>
             <Container fluid={true} style={{ width: "100%", height: "auto", backgroundColor: "#f5f5f5" }}>
                       
                        <Grid
-                        style={{paddingTop: 40}}
+                        style={{paddingTop: 20}}
                         container
                         direction="row"
                         justify="flex-start"

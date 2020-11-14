@@ -1,29 +1,20 @@
-import React from 'react';
-import clsx from 'clsx';
+import React, { useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
-import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
+import CancelIcon from '@material-ui/icons/Cancel';
+import IconButton from '@material-ui/core/IconButton';
+import Grid from '@material-ui/core/Grid';
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
+const couleurs = [
+  'Rouge',
+  'Blanc',
+  'Bulles',
+  'Rosé',
 ];
 
 function getStyles(name, personName, theme) {
@@ -35,77 +26,40 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function MultipleSelect() {
+export default function MultipleSelect({ listVin, setlistVin, reload, setreload }) {
   const classes = useStyles();
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
+  const [CouleurVin, setCouleurVin] = React.useState([]);
 
-  const handleChange = (event) => {
-    setPersonName(event.target.value);
-  };
+  const handleChange = async (event) => {
+    setCouleurVin(event.target.value);
+    console.log("EVENT", event.target.value);
 
-  const handleChangeMultiple = (event) => {
-    const { options } = event.target;
-    const value = [];
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        value.push(options[i].value);
-      }
-    }
-    setPersonName(value);
-  };
+    var rawresponse = await fetch(`/filtre`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `filtreFF=${event.target.value}`
+    });
+    var response = await rawresponse.json();
+    console.log(response)
+    setlistVin(response.filtre)
+
+  }
 
   return (
-    <div >
-   
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-mutiple-name-label">Couleur</InputLabel>
-        <Select
-          labelId="demo-mutiple-name-label"
-          id="demo-mutiple-name"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<Input />}
-          MenuProps={MenuProps}
-        >
-          {names.map((name) => (
-            <MenuItem key={name} value={name} style={getStyles(name, personName, theme)}>
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-
+    <Grid container
+      direction="row"
+      justify="flex-start"
+      alignItems="flex-end"
+      style={{ paddingTop: 70, paddingBottom: 20, paddingLeft: 15 }} >
 
       <FormControl className={classes.formControl}>
-        <InputLabel id="demo-mutiple-checkbox-label">Tag</InputLabel>
-        <Select
-          labelId="demo-mutiple-checkbox-label"
-          id="demo-mutiple-checkbox"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<Input />}
-          renderValue={(selected) => selected.join(', ')}
-          MenuProps={MenuProps}
-        >
-          {names.map((name) => (
-            <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.indexOf(name) > -1} />
-              <ListItemText primary={name} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-mutiple-chip-label">Chip</InputLabel>
+        <InputLabel id="demo-mutiple-chip-label">Couleur</InputLabel>
         <Select
           labelId="demo-mutiple-chip-label"
           id="demo-mutiple-chip"
           multiple
-          value={personName}
+          value={CouleurVin}
           onChange={handleChange}
           input={<Input id="select-multiple-chip" />}
           renderValue={(selected) => (
@@ -117,44 +71,46 @@ export default function MultipleSelect() {
           )}
           MenuProps={MenuProps}
         >
-          {names.map((name) => (
-            <MenuItem key={name} value={name} style={getStyles(name, personName, theme)}>
-              {name}
+          {couleurs.map((couleur) => (
+            <MenuItem key={couleur} value={couleur} style={getStyles(couleur, CouleurVin, theme)}>
+              {couleur}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
+      <IconButton onClick={() => {setreload(!reload); setCouleurVin([])}} aria-label="Cancel">
+          <CancelIcon style={{ color: "#fdd835" }} />
+      </IconButton>
 
-     </div>
+    </Grid>
   );
 }
 
 const useStyles = makeStyles((theme) => ({
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-      maxWidth: 300,
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    maxWidth: 300,
+  },
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  chip: {
+    margin: 2,
+  },
+  noLabel: {
+    marginTop: theme.spacing(3),
+  },
+}));
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
     },
-    chips: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    chip: {
-      margin: 2,
-    },
-    noLabel: {
-      marginTop: theme.spacing(3),
-    },
-  }));
-  
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
-  
+  },
+};

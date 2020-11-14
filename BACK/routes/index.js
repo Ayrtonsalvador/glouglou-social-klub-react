@@ -253,7 +253,6 @@ router.get('/macave', async function (req, res, next) {
   }
 })
 
-
 router.delete('/delete-ref/:Nom', async function (req, res, next) {
 
   var result = false
@@ -266,25 +265,6 @@ router.delete('/delete-ref/:Nom', async function (req, res, next) {
 
   res.json({ result })
 });
-
-// ------------------------ DELETE FAV ------------------------ \\
-router.delete('/delete-favoris/:Nom/:Token', async function (req, res, next) {
-
-  const userCaviste = await CavisteModel.findOne({
-    token: req.params.Token
-  })
-
-  var fav = userCaviste.Favoris
-
-  let neFa = fav.filter((e) => (e.Nom != req.params.Nom))
-
-  const updateCaviste = await CavisteModel.updateOne({
-    token: req.params.Token
-  }, { Favoris: neFa })
-
-  res.json({ updateCaviste })
-});
-
 
 // ------------------------ INFOS VIGNERON ------------------------ \\
 router.post('/info-update-v', async function (req, res, next) {
@@ -358,7 +338,6 @@ router.post('/info-update-v', async function (req, res, next) {
 
 })
 
-
 router.get('/info-v', async function (req, res, next) {
 
   const user = await VigneronModel.findOne({ token: req.query.token })
@@ -370,10 +349,8 @@ router.get('/info-v', async function (req, res, next) {
   }
 })
 
-
 // --------------------------------------- Mailbox CAVISTE -------------------------------------- \\
 
-//
 router.get('/mailbox-main', async function (req, res, next) {
 
   var Caviste = await CavisteModel.findOne(
@@ -387,7 +364,6 @@ router.get('/mailbox-main', async function (req, res, next) {
 });
 
 
-//
 router.get('/mailbox-read', async function (req, res, next) {
 
   var msgClicked = await CavisteModel.findOne(
@@ -397,7 +373,6 @@ router.get('/mailbox-read', async function (req, res, next) {
 
 });
 
-//
 router.get('/mailbox-write', async function (req, res, next) {
 
   var Caviste = await CavisteModel.findOne(
@@ -445,7 +420,6 @@ router.post('/mailbox-write', async function (req, res, next) {
 
 // --------------------------------------- Mailbox VIGNERON -------------------------------------- \\
 
-
 // BOITE DE RECEPTION
 router.get('/mailbox-main-v', async function (req, res, next) {
 
@@ -459,7 +433,6 @@ router.get('/mailbox-main-v', async function (req, res, next) {
   }
 });
 
-
 // LIRE UN MESSAGE
 router.get('/mailbox-read-v', async function (req, res, next) {
 
@@ -472,7 +445,6 @@ router.get('/mailbox-read-v', async function (req, res, next) {
     res.json({ result: false })
   }
 });
-
 
 //OK
 router.get('/mailbox-write-v', async function (req, res, next) {
@@ -625,12 +597,24 @@ router.get('/catalogue/:token', async function (req, res, next) {
   }
 })
 
+router.post('/filtre', async function (req, res, next) {
+
+  const filtre = await BouteilleModel.find({ Couleur: req.body.filtreFF })
+
+  if (filtre != null) {
+    res.json({ result: true, filtre })
+  } else {
+    res.json({ result: false })
+  }
+})
+
 // ---------------- FAVORIS CAVISTE ---------------- \\
 router.post('/add-favoris', async function (req, res, next) {
 
   const userCaviste = await CavisteModel.findOne({
     token: req.body.tokenFF
   })
+  console.log(req.body.tokenFF)
 
   const bouteille = await BouteilleModel.findOne({
     _id: req.body.IdFF
@@ -640,6 +624,14 @@ router.post('/add-favoris', async function (req, res, next) {
     _id: req.body.IdViFF
   })
 
+  var tabbouteille = userCaviste.Favoris
+  var already = false;
+
+  for (i=0; i <tabbouteille.length;i++){
+  if (tabbouteille[i].Nom === bouteille.Nom) {
+      already = true }}
+
+  if (already == false) {
    var favorisCaviste = await CavisteModel.updateOne(
     { token: req.body.tokenFF }, {
     $push: {
@@ -647,7 +639,7 @@ router.post('/add-favoris', async function (req, res, next) {
       { 
         Nom: bouteille.Nom,
         Couleur: bouteille.Couleur,
-        Millesime: bouteille.Milesime,
+        Millesime: bouteille.Millesime,
         Cepage: bouteille.Cepage,
         Desc: bouteille.Desc,
         AOC: bouteille.AOC,
@@ -661,7 +653,7 @@ router.post('/add-favoris', async function (req, res, next) {
         VilleVi : vigneron.Ville
       },
     }
-  })
+  })}
   
   if (favorisCaviste != null) {
     res.json({ result: true, bouteille, favorisCaviste, userCaviste })
@@ -683,15 +675,21 @@ router.get('/favoris/:token', async function (req, res, next) {
   }
 })
 
-router.post('/filtre', async function (req, res, next) {
+router.delete('/delete-favoris/:Nom/:Token', async function (req, res, next) {
 
-  const catalogue = await BouteilleModel.find({ Couleur: req.body.filtreFF })
+  const userCaviste = await CavisteModel.findOne({
+    token: req.params.Token
+  })
 
-  if (catalogue != null) {
-    res.json({ result: true, catalogue })
-  } else {
-    res.json({ result: false })
-  }
-})
+  var fav = userCaviste.Favoris
+
+  let neFa = fav.filter((e) => (e.Nom != req.params.Nom))
+
+  const updateCaviste = await CavisteModel.updateOne({
+    token: req.params.Token
+  }, { Favoris: neFa })
+
+  res.json({ updateCaviste })
+});
 
 module.exports = router;

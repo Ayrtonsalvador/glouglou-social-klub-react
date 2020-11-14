@@ -37,7 +37,6 @@ function CardFavoris({ favoris, token, setdeleted, deleted }) {
             method: 'DELETE'
         });
         var response = await rawResponse.json();
-        console.log("FAVORIS", response.Favoris);
         setdeleted(!deleted)
     }
 
@@ -66,7 +65,7 @@ function CardFavoris({ favoris, token, setdeleted, deleted }) {
                 </CardContent>
                 <CardActions disableSpacing>
 
-                    <IconButton  onClick={deleteFavoris} aria-label="add to favorites">
+                    <IconButton onClick={deleteFavoris} aria-label="add to favorites">
                         <FavoriteIcon style={{ color: '#CC3300'}}/>
                     </IconButton>
 
@@ -111,7 +110,7 @@ function CardFavoris({ favoris, token, setdeleted, deleted }) {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 250,
+        maxWidth: 280,
         whiteSpace: 'wrap',
         marginBottom: theme.spacing(1),
     },
