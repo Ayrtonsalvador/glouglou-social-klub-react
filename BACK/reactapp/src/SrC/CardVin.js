@@ -18,148 +18,144 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import MessageIcon from '@material-ui/icons/Message';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Fab from '@material-ui/core/Fab';
-
 
 import { connect } from 'react-redux';
+import FavorisC from './FavorisC';
 
-function CardVin({ bouteille , token }) {
+function CardVin({ bouteille, token }) {
 
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
-    const [liked, setliked] = useState(true)
+    const [liked, setliked] = useState(false)
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
-    var color = ""
-    if (liked === true){
-         color =  "#CC3300"
-      } else {
-        color = ""
-      }
-    
+    var coloricon = ""
+
+    if (liked) {
+        coloricon = "#CC3300"
+    } else {
+        coloricon = ""
+    }
+
     //   ${token}
     const addFavoris = async () => {
+        setliked(!liked);
+
         var data = await fetch(`/add-favoris`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `IdFF=${bouteille._id}&IdViFF=${bouteille.IdVigneron._id}&tokenFF=47PlPYcfoj7eORElqNzEHYRhWKNRm9vo`
-        })   
-        }
+        })
+    }
 
     // -------------MAP CATALOGUE------------- \\  
 
-        return (
-            <Grid item xs={2}>
-                <Card className={classes.root}>
-                    <CardHeader
-                        id={bouteille._id}
-                        title={bouteille.Nom}
-                        subheader={bouteille.Millesime}
-                    />
-                    <CardMedia
-                        className={classes.media}
-                        image={bouteille.Photo}
-                        title="Paella dish"
-                    />
-                    <CardContent style={{ width: "100%", height: "30%" }}>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            {bouteille.Cepage}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            {bouteille.Desc}
-                        </Typography>
-                    </CardContent>
-                    <CardActions disableSpacing>
+    return (
+        <Grid item xs={6} md={2} xl={2} spacing={2}>
+            <Card className={classes.root} style={{ margin: 10 }}>
+                <CardHeader
+                    id={bouteille._id}
+                />
+                <h5 style={{ marginLeft: 10, marginBottom: 0 }}> {bouteille.Nom}</h5>
+                <p style={{ marginLeft: 10, marginBottom: 0 }}> {bouteille.Millesime}</p>
+                <p style={{ marginLeft: 10 }}> {bouteille.AOC}</p>
 
-                    <IconButton onClick={()=>{addFavoris(); setliked(!liked)}} aria-label="Message">
-                                <FavoriteIcon />
+                <CardMedia
+                    className={classes.media}
+                    image={bouteille.Photo}
+                />
+                <CardContent style={{ width: "100%", height: "30%" }}>
+                    <Typography variant="h6" color="textSecondary" component="p">
+                        {bouteille.Cepage}
+                    </Typography>
+                    <div id="parent" style={{height:130}}>
+                    <Typography id="child" variant="body2" color="textSecondary" component="p">
+                        {bouteille.Desc}
+                    </Typography>
+                    </div>
+                </CardContent>
+                <CardActions disableSpacing>
+
+                    <IconButton style={{ outline: 'none' }} onClick={addFavoris} aria-label="add to favorites">
+                        <FavoriteIcon style={{ color: coloricon }} />
                     </IconButton>
 
-                        <IconButton
-                            className={clsx(classes.expand, {
-                                [classes.expandOpen]: expanded,
-                            })}
-                            onClick={() => {handleExpandClick()}}
-                            aria-expanded={expanded}
-                            aria-label="show more"
-                        >
-                            <ExpandMoreIcon />
-                        </IconButton>
-                    </CardActions>
+                    <IconButton
+                        className={clsx(classes.expand, {
+                            [classes.expandOpen]: expanded,
+                        })}
+                        onClick={() => { handleExpandClick() }}
+                        aria-expanded={expanded}
+                        aria-label="show more"
+                        style={{ outline: 'none' }}
+                    >
+                        <ExpandMoreIcon />
+                    </IconButton>
+                </CardActions>
 
-                    <Collapse in={expanded} timeout="auto" unmountOnExit>
-                        <CardContent>
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <CardContent>
+
                             <Avatar aria-label="recipe" className={classes.avatar} src={bouteille.IdVigneron.Photo}>
                             </Avatar>
-                            <Typography paragraph>
-                                {bouteille.IdVigneron.Nom}
-                            </Typography>
-                            <Typography paragraph>
+                            
+                            <h5 style={{ marginTop: 10, marginBottom: 0 }}>
+                                {bouteille.IdVigneron.Nom} </h5>
+                            <Typography variant="h6"  component="p" style={{ margin: 0, fontSize: 14 }}>
                                 {bouteille.IdVigneron.Domaine}
                             </Typography>
-                            <Typography paragraph>
+                            <Typography variant="h6" component="p" style={{ marginTop: -4, marginBottom: 10, fontSize: 14 }}>
                                 {bouteille.IdVigneron.Ville}
                             </Typography>
-                            <Typography paragraph>
-                                {bouteille.IdVigneron.Desc}
-                            </Typography>
-                            <IconButton aria-label="Message">
-                                <MessageIcon />
-                            </IconButton>
-                        </CardContent>
-                    </Collapse>
+                            
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            {bouteille.IdVigneron.Desc}
+                        </Typography>
+                        <IconButton aria-label="Message">
+                            <MessageIcon />
+                        </IconButton>
 
-                </Card>
-            </Grid>
-        )
-    }
+                    </CardContent>
+                </Collapse>
+            </Card>
+        </Grid>
+    )
+}
 
-    const useStyles = makeStyles((theme) => ({
-        root: {
-            maxWidth: 280
-        ,
-            whiteSpace: 'wrap',
-            marginBottom: theme.spacing(1),
-        },
-        media: {
-            height: 0,
-            paddingTop: '56.25%', // 16:9
-        },
-        expand: {
-            transform: 'rotate(0deg)',
-            marginLeft: 'auto',
-            transition: theme.transitions.create('transform', {
-                duration: theme.transitions.duration.shortest,
-            }),
-        },
-        expandOpen: {
-            transform: 'rotate(180deg)',
-        },
-        container: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(12, 1fr)',
-            gridGap: theme.spacing(3),
-          },
-          paper: {
-            padding: theme.spacing(1),
-            textAlign: 'center',
-            color: theme.palette.text.secondary,
-            whiteSpace: 'nowrap',
-            marginBottom: theme.spacing(1),
-          },
-          divider: {
-            margin: theme.spacing(2, 0),
-          },
-    }));
-    
-    function mapStateToProps(state) {
-        return { token: state.token }
-    }
+const useStyles = makeStyles((theme) => ({
+    media: {
+        height: 0,
+        paddingTop: '56.25%', // 16:9
 
-    export default connect(
-        mapStateToProps,
-        null,
-    )(CardVin);
+    },
+    expand: {
+        transform: 'rotate(0deg)',
+        marginLeft: 'auto',
+        transition: theme.transitions.create('transform', {
+            duration: theme.transitions.duration.shortest,
+        }),
+    },
+    expandOpen: {
+        transform: 'rotate(180deg)',
+    },
+    container: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(12, 1fr)',
+        gridGap: theme.spacing(3),
+    },
+    divider: {
+        margin: theme.spacing(2, 0),
+    },
+}));
+
+function mapStateToProps(state) {
+    return { token: state.token }
+}
+
+export default connect(
+    mapStateToProps,
+    null,
+)(CardVin);

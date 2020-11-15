@@ -34,15 +34,21 @@ function NavigationV({addToken}) {
       <AppBar position="static" color="primary">
         <Toolbar>
 
-          <div className={classes.title}>
+          <div className={classes.title} style={{marginLeft:60}}>
 
-          <Typography to='/' variant="h6" >
+          <Typography  variant="h4" >
+            <Link to='/CatalogueC' style={{ textDecoration: 'none', color:"#fdd835", marginRight:20}}>
+              Catalogue
+              </Link>
+            </Typography>
+
+          <Typography to='/' variant="h4" >
               <Link to='/SrcaveV' style={{ textDecoration: 'none', color: "white", marginRight: 20 }}>
                 Ma cave
               </Link>
             </Typography>
 
-            <Typography variant="h6" >
+            <Typography variant="h4" >
               <Link to='/SrmessagerieV' style={{ textDecoration: 'none', color: "white", marginRight: 20 }}>
                 Mes messages
               </Link>
@@ -50,7 +56,7 @@ function NavigationV({addToken}) {
           </div>
 
           <Button style={{ color:"white"}} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-            Mon profil
+          <Typography variant="h6" style={{fontWeight: "bold"}}> Mon profil </Typography>
             </Button>
             <Menu
                 id="simple-menu"

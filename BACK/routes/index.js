@@ -37,7 +37,7 @@ router.post('/sign-up', async function (req, res, next) {
     || req.body.emailFromFront == ''
     || req.body.telFromFront == ''
   ) {
-    error.push('veuillez compléter les champs vides !')
+    error.push('Veuillez compléter les champs vides')
   }
 
   // SIGNUP CAVISTES
@@ -126,7 +126,7 @@ router.post('/sign-in', async function (req, res, next) {
     })
 
     if(!userCaviste){
-      error.push('email incorrect')
+      error.push('Email')
     }
 
     if (userCaviste) {
@@ -138,7 +138,7 @@ router.post('/sign-in', async function (req, res, next) {
         status = userCaviste.Status
       } else {
         result = false
-        error.push('mot de passe incorrect')
+        error.push('Mot de passe incorrect')
       }
     }
 
@@ -363,7 +363,6 @@ router.get('/mailbox-main', async function (req, res, next) {
   }
 });
 
-
 router.get('/mailbox-read', async function (req, res, next) {
 
   var msgClicked = await CavisteModel.findOne(
@@ -499,6 +498,8 @@ router.post('/info-update-c', async function (req, res, next) {
 
   var userinfosFB = JSON.parse(req.body.userinfos)
   var image = req.files.avatar
+  console.log(userinfosFB)
+  console.log(image);
 
   if (image.size == 0) {
 
@@ -566,10 +567,9 @@ router.post('/info-update-c', async function (req, res, next) {
   res.json({ result: true, infos })
 })
 
-router.get('/info-c', async function (req, res, next) {
-  var infos = []
-  var token = null
-  const user = await CavisteModel.findOne({ token: req.query.token })
+router.get('/info-c/:token', async function (req, res, next) {
+
+  const user = await CavisteModel.findOne({ token: req.params.token })
 
   if (user != null) {
     res.json({ result: true, user })
@@ -600,9 +600,12 @@ router.get('/catalogue/:token', async function (req, res, next) {
 router.post('/filtre', async function (req, res, next) {
 
   const filtre = await BouteilleModel.find({ Couleur: req.body.filtreFF })
+  .populate('IdVigneron')
+  .exec()
 
   if (filtre != null) {
     res.json({ result: true, filtre })
+    console.log("FILTRE", filtre)
   } else {
     res.json({ result: false })
   }
@@ -665,7 +668,6 @@ router.post('/add-favoris', async function (req, res, next) {
 router.get('/favoris/:token', async function (req, res, next) {
 
   var favCaviste = await CavisteModel.findOne({ token: req.params.token })
-  console.log("FAVORIS", favCaviste);
 
   if (favCaviste != null) {
     res.json({ result: true, favCaviste })

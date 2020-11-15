@@ -1,3 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Source+Code+Pro&display=swap');
+
+h2 {
+  font-family: 'Anton', sans-serif;
+}
+
+h5 {
+  font-family: 'Anton', sans-serif;
+  font-weight: 'bold';
+}
+
+p {
+  font-family: 'Source Code Pro', monospace;
+}
+
+h6 {
+  font-family: 'Anton', sans-serif;
+}
+
 .App {
   text-align: center;
 }
@@ -14,7 +34,7 @@
 }
 
 .App-header {
-  background-color: #FFFFFF;
+  background-color: #f5f5f5;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,8 +44,18 @@
   color: white;
 }
 
-/* .App-link {
-  color: #61dafb;
+/* #parent {
+  height: 130px;
+  overflow: hidden;
+}
+
+#child {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  box-sizing: content-box;
+  -ms-overflow-style: none; 
+  scrollbar-width: none;
 } */
 
 @keyframes App-logo-spin {

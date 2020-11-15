@@ -32,21 +32,16 @@ function CatalogueC({ token, sendMessage, message, bouteille }) {
         <div>
             <Grid
                 container
-                direction="column"
-                alignItems="flex-start" >
+                direction="column" >
                 <NavigationC />
                 <MultipleSelect listVin={listVin} setlistVin={setlistVin} reload={reload} setreload={setreload}/>
             </Grid>
-            <Container fluid={true} style={{ width: "100%", height: "auto", backgroundColor: "#f5f5f5" }}>
-                      
-                       <Grid
-                        style={{paddingTop: 20}}
-                        container
-                        direction="row"
-                        justify="flex-start"
-                        // alignItems="flex-start"
-                        spacing={2}
-                        >
+            <Container fluid={true} style={{ paddingTop: 20, paddingLeft: 75, backgroundSize: 'cover', backgroundColor: "#f5f5f5" }}>    
+                         <Grid container 
+                justify="flex-start"
+                alignItems="flex-start"
+                wrap="wrap"
+>
                         {listVin.map((bouteille, i) => {
                             return (
                                 <CardVin key={i} bouteille={bouteille} />

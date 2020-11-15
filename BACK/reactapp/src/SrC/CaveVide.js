@@ -1,36 +1,37 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
 import Paper from '@material-ui/core/Paper';
-import Slide from '@material-ui/core/Slide';
-import Grow from '@material-ui/core/Grow';
+import Fade from '@material-ui/core/Fade';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-
 export default function CaveVide({vide}) {
 
     const classes = useStyles();
     const [checked, setChecked] = React.useState(false); 
 
-    if (vide) {
-      
-        setChecked((prev) => !prev);
+    const handleChange = () => {
+      setChecked((prev) => !prev);
+    };
   
-        return (
-          <div className={classes.root}>
-            <div className={classes.wrapper}>
-              <Slide direction="up" in={checked} mountOnEnter unmountOnExit>
-                <Paper elevation={4} className={classes.paper}>
-                  <svg className={classes.svg}>
-                    <polygon points="0,100 50,00, 100,100" className={classes.polygon} />
-                  </svg>
-                </Paper>
-              </Slide>
-            </div>
-          </div>
-        );
-      };
-    }
-      const useStyles = makeStyles((theme) => ({
+    return (
+      <div className={classes.root}>
+        <FormControlLabel
+          control={<Switch checked={checked} onChange={handleChange} />}
+          label="Show"
+        />
+        <div className={classes.container}>
+          <Fade in={checked}>
+            <Paper elevation={4} className={classes.paper}>
+              <svg className={classes.svg}>
+                <polygon points="0,100 50,00, 100,100" className={classes.polygon} />
+              </svg>
+            </Paper>
+          </Fade>
+        </div>
+      </div>
+    );
+  }
+    const useStyles = makeStyles((theme) => ({
         root: {
           height: 180,
         },

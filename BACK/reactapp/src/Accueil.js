@@ -2,19 +2,25 @@ import React, { useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
-import { Container, Row, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { Container, Row, Form, FormGroup, Label, FormText } from 'reactstrap';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
-
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-
-import NavigationC from "./SrC/NavigationC"
-import NavigationV from "./SrV/NavigationV"
+import clsx from 'clsx';
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom'
@@ -28,16 +34,19 @@ function Accueil({ addStatus, addToken, userstatus, token }) {
     const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
     const tutorialSteps = [
-        {  id: 1,
+        {
+            id: 1,
             label: 'BOIRE BIEN, BOIRE MIEUX',
             para: 'Notre équipe propose une selections de vins naturels et biodynamiques provenant de petits producteurs indépendants.',
         },
-        { id: 2,
-            label: 'CÔTÉ VIGNERONS',
+        {
+            id: 2,
+            label: 'COTE VIGNERON',
             para: 'Nous participons au développement des producteurs indépendants grâce à notre catalogue de références à disposition des cavistes.',
         },
-        {id: 3,
-            label: 'CÔTÉ CAVISTES',
+        {
+            id: 3,
+            label: 'COTE CAVISTE',
             para: 'Nous aidons les restaurateurs à étoffer leur carte grâce à une présélection de références de petits producteurs.',
         },
     ];
@@ -93,6 +102,7 @@ function Accueil({ addStatus, addToken, userstatus, token }) {
 
         } else {
             setErrorsSignup(response.error)
+            seterror(true)
         }
     }
 
@@ -111,6 +121,7 @@ function Accueil({ addStatus, addToken, userstatus, token }) {
             setUserExists(true)
         } else {
             setErrorsSignup(response.error)
+            seterror(true)
         }
     }
 
@@ -137,13 +148,33 @@ function Accueil({ addStatus, addToken, userstatus, token }) {
 
         } else {
             setErrorsSignin(response.error);
-            setinvalid(true)
+            seterror(true)
         }
+    }
+
+    const [values, setValues] = React.useState({
+        showPassword: false,
+    });
+
+    const handleClickShowPassword = () => {
+        setValues({ ...values, showPassword: !values.showPassword });
+    };
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
+
+    const [view, setview] = useState(false)
+    var colorIcon = ""
+    if (view) {
+        colorIcon = "primary"
+    } else {
+        colorIcon = ""
     }
 
     // -------------ERREURS------------- \\
 
-    const [invalid, setinvalid] = useState(false);
+    const [error, seterror] = useState(false);
 
     var tabErrorsSignin = ErrorsSignin.map((error, i) => {
         return (<p key={i} color='#BB1F1F'>{error}</p>)
@@ -166,46 +197,42 @@ function Accueil({ addStatus, addToken, userstatus, token }) {
     return (
         <Container fluid={true} style={{ width: "100%", height: "100vh", backgroundColor: "#000000" }}>
 
-            <Paper style={{ backgroundColor: "#000000", height: "15%" }} className={classes.paper}></Paper>
+            <Paper style={{ backgroundColor: "#000000", height: "20%" }} className={classes.paper}></Paper>
 
             <Grid container direction="row"
                 justify="center"
-                alignItems="center"
-                spacing={8} >
+                alignItems="center">
 
-                <Grid item xs={5} >
-                    <Paper style={{ backgroundColor: "#000000" }} className={classes.paper}>
-                        <img src="GGSCb.png" style={{ width: "80%", height: "80%" }} />
-                    </Paper>
-                </Grid>
+                <img src="GGSCb.png" style={{ width: 500, height: 500, marginRight: 150 }} />
 
                 <Grid item xs={3} direction="colmun" justify="center" alignItems="center">
                     <Grid>
-                    <AutoPlaySwipeableViews
-                        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                        index={activeStep}
-                        onChangeIndex={handleStepChange}
-                        enableMouseEvents
-                    >
-                        {tutorialSteps.map((step, index) => (
-                                <div style={{ color: "#FFFFFF", paddingBottom: 20 }} key={step.id}>
+                        <AutoPlaySwipeableViews
+                            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                            index={activeStep}
+                            onChangeIndex={handleStepChange}
+                            enableMouseEvents
+                        >
+                            {tutorialSteps.map((step, index) => (
+                                <div style={{ color: "#FFFFFF", paddingBottom: 20, width: 350 }} key={step.id}>
                                     {Math.abs(activeStep - index) <= 2 ? (
-                                        <div> <h4>{step.label}</h4><p> {step.para} </p> </div>
+                                        <div> <h2>{step.label}</h2><p style={{ fontSize: 20, marginBottom: 0 }}> {step.para} </p> </div>
                                     ) : null}
                                 </div>
-                        ))}
-                    </AutoPlaySwipeableViews>
+                            ))}
+                        </AutoPlaySwipeableViews>
                     </Grid>
 
                     <Grid container direction="row" alignItems="center" >
                         <Grid>
-                            <Button style={{ backgroundColor: "#fdd835", color: "#FFFFFF", marginTop: 20 }} variant="outlined" color="primary" onClick={handleOpenSignIn}>Connexion</Button>
+                            <Button style={{ backgroundColor: "#fdd835", color: "#FFFFFF", marginTop: 20, outline: 'none' }} variant="outlined" color="primary" onClick={handleOpenSignIn}>Connexion</Button>
                             <Modal
+
                                 aria-labelledby="transition-modal-title"
                                 aria-describedby="transition-modal-description"
                                 className={classes.modal}
                                 open={opensignin}
-                                onClose={handleCloseSignIn}
+                                onClose={() => { handleCloseSignIn(); setErrorsSignin([]) }}
                                 closeAfterTransition
                                 BackdropComponent={Backdrop}
                                 BackdropProps={{
@@ -213,21 +240,46 @@ function Accueil({ addStatus, addToken, userstatus, token }) {
                                 }}
                             >
                                 <Fade in={opensignin}>
-                                    <div className={classes.papermodal}>
-                                        <h3 id="transition-modal-title">J'ai un compte</h3>
-                                        <Form>
-                                            <FormGroup>
-                                                <Input invalid={invalid} type="email" name="email" id="Email" placeholder="@Glouglou.com"
-                                                    onChange={(e) => setSignInEmail(e.target.value)} />
-                                            </FormGroup>
-                                            <FormGroup>
-                                                <Input invalid={invalid} type="password" name="password" id="Password" placeholder="Mot de passe"
-                                                    onChange={(e) => setSignInPassword(e.target.value)} />
-                                            </FormGroup>
-                                            {tabErrorsSignin}
-                                            <Button style={{ marginTop: 10, backgroundColor: "#fdd835", color: "#FFFFFF" }} onClick={() => SubmitSignin()}>OK</Button>
-                                        </Form>
-                                    </div>
+                                    <Grid
+                                        container
+                                        direction="column"
+                                        justify="center"
+                                        alignItems="center"
+                                    >
+                                        <div className={classes.papermodal} style={{ width: 400, height: 300 }}>
+                                            <h5 id="transition-modal-title">J'ai un compte</h5>
+
+                                            <TextField style={{ width: 300, marginBottom: 10, marginTop: 10 }} error={error} id="outlined-basic" label="Email" placeholder="@Glouglou.com" 
+                                            variant="outlined" onChange={(e) => setSignInEmail(e.target.value)} helperText={{tabErrorsSignin}}/>
+                                            <FormControl variant="outlined" style={{ width: 300 }} >
+                                                <InputLabel htmlFor="outlined-adornment-password">Mot de passe</InputLabel>
+                                                <OutlinedInput
+                                                    id="outlined-adornment-password"
+                                                    type={values.showPassword ? 'text' : 'password'}
+                                                    value={values.password}
+                                                    onChange={(e) => setSignInPassword(e.target.value)}
+                                                    error={error}
+                                                    endAdornment={
+                                                        <InputAdornment position="end">
+                                                            <IconButton
+                                                                aria-label="toggle password visibility"
+                                                                onClick={() => { handleClickShowPassword(); setview(!view) }}
+                                                                onMouseDown={handleMouseDownPassword}
+                                                                edge="end"
+                                                                color={colorIcon}
+                                                            >
+                                                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                                            </IconButton>
+
+                                                        </InputAdornment>
+                                                    }
+                                                    labelWidth={100}
+                                                />
+                                            </FormControl>
+                                            
+                                            <Button style={{ marginTop: 10, backgroundColor: "#fdd835", color: "#FFFFFF", outline: 'none' }} onClick={() => SubmitSignin()}>OK</Button>
+                                        </div>
+                                    </Grid>
                                 </Fade>
                             </Modal>
                         </Grid>
@@ -239,7 +291,7 @@ function Accueil({ addStatus, addToken, userstatus, token }) {
                                 aria-describedby="transition-modal-description"
                                 className={classes.modal}
                                 open={opensignup}
-                                onClose={handleCloseSignUp}
+                                onClose={() => { handleCloseSignUp(); setErrorsSignup([]) }}
                                 closeAfterTransition
                                 BackdropComponent={Backdrop}
                                 BackdropProps={{
@@ -247,37 +299,50 @@ function Accueil({ addStatus, addToken, userstatus, token }) {
                                 }}
                             >
                                 <Fade in={opensignup}>
-                                    <div className={classes.papermodal}>
-                                        <h3 id="transition-modal-title">Je créé mon compte</h3>
+                                    <div className={classes.papermodal} style={{ width: 400, height: 450 }}>
+                                        <h5 id="transition-modal-title">Je créé mon compte</h5>
 
-                                        <Form>
-                                            <FormGroup>
-                                                <Input type="pseudo" name="pseudo" id="Pseudo" placeholder="Nom Prénom"
-                                                    onChange={(e) => setSignUpUsername(e.target.value)} />
-                                            </FormGroup>
+                                        <TextField style={{ width: 300, marginBottom: 10, marginTop: 10 }} error={error} id="outlined-basic" label="Nom Prénom" placeholder="Nom Prénom"
+                                            variant="outlined" onChange={(e) => setSignUpUsername(e.target.value)} />
 
-                                            <FormGroup>
-                                                <Input type="email" name="" id="Email" placeholder="@Glouglou.com"
-                                                    onChange={(e) => setSignUpEmail(e.target.value)} />
-                                            </FormGroup>
+                                        <TextField style={{ width: 300, marginBottom: 10, marginTop: 10 }} error={error} id="outlined-basic" label="Email" placeholder="Email"
+                                            variant="outlined" onChange={(e) => setSignUpEmail(e.target.value)} />
 
-                                            <FormGroup>
-                                                <Input type="telephone" name="" id="Telephone" placeholder="Telephone"
-                                                    onChange={(e) => setSignUpTel(e.target.value)} />
-                                            </FormGroup>
+                                        <TextField style={{ width: 300, marginBottom: 10, marginTop: 10 }} error={error} id="outlined-basic" label="Telephone" placeholder="Telephone"
+                                            variant="outlined" onChange={(e) => setSignUpTel(e.target.value)} helperText={{tabErrorsSignup}} />
 
-                                            <FormGroup>
-                                                <Input type="password" name="password" id="examplePassword" placeholder="Mot de passe"
-                                                    onChange={(e) => setSignUpPassword(e.target.value)} />
-                                            </FormGroup>
-                                            {tabErrorsSignup}
-                                            <FormText>Je suis :</FormText>
+                                        <FormControl variant="outlined" style={{ width: 300 }} >
+                                            <InputLabel htmlFor="outlined-adornment-password">Mot de passe</InputLabel>
+                                            <OutlinedInput
+                                                id="outlined-adornment-password"
+                                                type={values.showPassword ? 'text' : 'password'}
+                                                value={values.password}
+                                                onChange={(e) => setSignUpPassword(e.target.value)}
+                                                error={error}
+                                                endAdornment={
+                                                    <InputAdornment position="end">
+                                                        <IconButton
+                                                            aria-label="toggle password visibility"
+                                                            onClick={() => { handleClickShowPassword(); setview(!view) }}
+                                                            onMouseDown={handleMouseDownPassword}
+                                                            edge="end"
+                                                            color={colorIcon}
+                                                        >
+                                                            {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                                        </IconButton>
 
-                                            <Button style={{ marginTop: 10, backgroundColor: "#fdd835", color: "#FFFFFF" }} onClick={() => SubmitSignupV()}>VIGNERON</Button>
-                                            <Button style={{ marginTop: 10, marginLeft: 20, backgroundColor: "#fdd835", color: "#FFFFFF" }} onClick={() => SubmitSignupC()}>CAVISTE</Button>
-
-                                        </Form>
-
+                                                    </InputAdornment>
+                                                }
+                                                labelWidth={100}
+                                            />
+                                        </FormControl>
+                                        <Grid container
+                                            direction="row"
+                                            justify="center"
+                                            justify="space-around">
+                                            <Button style={{  width: 90, marginTop: 20, backgroundColor: "#fdd835", color: "#FFFFFF", outline: 'none' }} onClick={() => SubmitSignupV()}>VIGNERON</Button>
+                                            <Button style={{ width: 90, marginTop: 20, backgroundColor: "#fdd835", color: "#FFFFFF", outline: 'none' }} onClick={() => SubmitSignupC()}>CAVISTE</Button>
+                                        </Grid>
                                     </div>
                                 </Fade>
                             </Modal>
@@ -331,6 +396,10 @@ const useStyles = makeStyles((theme) => ({
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
     },
 
 }));

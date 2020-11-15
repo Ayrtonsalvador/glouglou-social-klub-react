@@ -49,20 +49,17 @@ function Favoris({ token, favoris }) {
             <Grid
                 container
                 direction="column"
-                alignItems="flex-start" >
+                >
                 <NavigationC />
             </Grid>
-            <Container fluid={true} style={{ width: "100%", height: "100vh", backgroundColor: "#FFFFFF" }}>
-                <Grid
-                    style={{ paddingTop: 80 }}
-                    container
-                    direction="row"
+            <Container fluid={true} style={{ paddingTop: 90, paddingLeft: 75, backgroundColor: "#f5f5f5", height:'100vh'}}>
+            <Grid container   
                     justify="flex-start"
-                    // alignItems="flex-start"
-                    spacing={2}
-                >
-                    {listVin.map((favoris, i) => {
-                        return (<CardFavoris key={i} favoris={favoris} vide={vide} deleted={deleted} setdeleted={setdeleted} />)
+                    alignItems="flex-start"
+                    wrap="wrap"
+                    >
+                    {listVin.map((bouteille, i) => {
+                        return (<CardFavoris key={i} bouteille={bouteille} vide={vide} deleted={deleted} setdeleted={setdeleted} />)
                     })}
                     {/* <CaveVide/> */}
                 </Grid>
@@ -71,7 +68,6 @@ function Favoris({ token, favoris }) {
         </div>
     );
 }
-
 
 function mapStateToProps(state) {
     return { token: state.token, userstatus: state.userstatus }

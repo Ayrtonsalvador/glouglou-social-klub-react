@@ -22,7 +22,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import { connect } from 'react-redux';
 
-function CardFavoris({ favoris, token, setdeleted, deleted }) {
+function CardFavoris({ bouteille, token, setdeleted, deleted }) {
 
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
@@ -33,7 +33,7 @@ function CardFavoris({ favoris, token, setdeleted, deleted }) {
 
     //   ${token}
     const deleteFavoris = async () => {
-        var rawResponse = await fetch(`/delete-favoris/${favoris.Nom}/47PlPYcfoj7eORElqNzEHYRhWKNRm9vo`, {
+        var rawResponse = await fetch(`/delete-favoris/${bouteille.Nom}/47PlPYcfoj7eORElqNzEHYRhWKNRm9vo`, {
             method: 'DELETE'
         });
         var response = await rawResponse.json();
@@ -43,74 +43,77 @@ function CardFavoris({ favoris, token, setdeleted, deleted }) {
     // -------------MAP CATALOGUE------------- \\  
 
     return (
-        <Grid item xs={2}>
-            <Card className={classes.root}>
-                <CardHeader
-                    id={favoris._id}
-                    title={favoris.Nom}
-                    subheader={favoris.Millesime}
-                />
-                <CardMedia
-                    className={classes.media}
-                    image={favoris.Photo}
-                    title="Paella dish"
-                />
-                <CardContent style={{ width: "100%", height: "30%" }}>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        {favoris.Cepage}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        {favoris.Desc}
-                    </Typography>
-                </CardContent>
-                <CardActions disableSpacing>
+        <Grid item xs={6} md={2} xl={2} spacing={2}>
+        <Card className={classes.root} style={{ margin: 10 }}>
+            <CardHeader
+                id={bouteille._id}
+            />
+            <h5 style={{ marginLeft: 10, marginBottom: 0 }}> {bouteille.Nom}</h5>
+            <p style={{ marginLeft: 10, marginBottom: 0 }}> {bouteille.Millesime}</p>
+            <p style={{ marginLeft: 10 }}> {bouteille.AOC}</p>
 
-                    <IconButton onClick={deleteFavoris} aria-label="add to favorites">
-                        <FavoriteIcon style={{ color: '#CC3300'}}/>
-                    </IconButton>
+            <CardMedia
+                className={classes.media}
+                image={bouteille.Photo}
+            />
+            <CardContent style={{ width: "100%", height: "30%" }}>
+                <Typography variant="h6" color="textSecondary" component="p">
+                    {bouteille.Cepage}
+                </Typography>
+                <Typography style={{height:130}} variant="body2" color="textSecondary" component="p">
+                    {bouteille.Desc}
+                </Typography>
+            </CardContent>
+            <CardActions disableSpacing>
 
-                    <IconButton
-                        className={clsx(classes.expand, {
-                            [classes.expandOpen]: expanded,
-                        })}
-                        onClick={() => { handleExpandClick() }}
-                        aria-expanded={expanded}
-                        aria-label="show more"
-                    >
-                        <ExpandMoreIcon />
-                    </IconButton>
-                </CardActions>
+                <IconButton style={{ outline: 'none' }} onClick={deleteFavoris} aria-label="add to favorites">
+                    <FavoriteIcon style={{ color: "#CC3300" }} />
+                </IconButton>
 
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                    <CardContent>
-                        <Avatar aria-label="recipe" className={classes.avatar} src={favoris.PhotoVi}>
+                <IconButton
+                    className={clsx(classes.expand, {
+                        [classes.expandOpen]: expanded,
+                    })}
+                    onClick={() => { handleExpandClick() }}
+                    aria-expanded={expanded}
+                    aria-label="show more"
+                    style={{ outline: 'none' }}
+                >
+                    <ExpandMoreIcon />
+                </IconButton>
+            </CardActions>
+
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <CardContent>
+
+                        <Avatar aria-label="recipe" className={classes.avatar} src={bouteille.PhotoVi}>
                         </Avatar>
-                        <Typography paragraph>
-                            {favoris.NomVi}
+                        
+                        <h5 style={{ marginTop: 10, marginBottom: 0 }}>
+                            {bouteille.NomVi} </h5>
+                        <Typography variant="h6"  component="p" style={{ margin: 0, fontSize: 14 }}>
+                            {bouteille.DomaineVi}
                         </Typography>
-                        <Typography paragraph>
-                            {favoris.DomaineVi}
+                        <Typography variant="h6" component="p" style={{ marginTop: -4, marginBottom: 10, fontSize: 14 }}>
+                            {bouteille.VilleVi}
                         </Typography>
-                        <Typography paragraph>
-                            {favoris.VilleVi}
-                        </Typography>
-                        <Typography paragraph>
-                            {favoris.DescVi}
-                        </Typography>
-                        <IconButton aria-label="Message">
-                            <MessageIcon />
-                        </IconButton>
-                    </CardContent>
-                </Collapse>
+                        
+                    <Typography variant="body2" color="textSecondary" component="p">
+                        {bouteille.DescVi}
+                    </Typography>
+                    <IconButton aria-label="Message">
+                        <MessageIcon />
+                    </IconButton>
 
-            </Card>
-        </Grid>
+                </CardContent>
+            </Collapse>
+        </Card>
+    </Grid>
     )
 }
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 280,
         whiteSpace: 'wrap',
         marginBottom: theme.spacing(1),
     },
@@ -132,17 +135,10 @@ const useStyles = makeStyles((theme) => ({
         display: 'grid',
         gridTemplateColumns: 'repeat(12, 1fr)',
         gridGap: theme.spacing(3),
-    },
-    paper: {
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        whiteSpace: 'nowrap',
-        marginBottom: theme.spacing(1),
-    },
-    divider: {
+      },
+      divider: {
         margin: theme.spacing(2, 0),
-    },
+      },
 }));
 
 function mapStateToProps(state) {

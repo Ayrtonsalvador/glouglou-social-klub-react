@@ -43,7 +43,6 @@ export default function MultipleSelect({ listVin, setlistVin, reload, setreload 
     var response = await rawresponse.json();
     console.log(response)
     setlistVin(response.filtre)
-
   }
 
   return (
@@ -51,11 +50,16 @@ export default function MultipleSelect({ listVin, setlistVin, reload, setreload 
       direction="row"
       justify="flex-start"
       alignItems="flex-end"
-      style={{ paddingTop: 70, paddingBottom: 20, paddingLeft: 15 }} >
+      style={{ paddingTop: 80, paddingBottom: 20, paddingLeft: 63}} >
+
+      <IconButton onClick={() => { setreload(!reload); setCouleurVin([])}} aria-label="Cancel">
+        <CancelIcon style={{ color: "#fdd835" }} />
+      </IconButton>
 
       <FormControl className={classes.formControl}>
-        <InputLabel id="demo-mutiple-chip-label">Couleur</InputLabel>
+        <InputLabel id="demo-mutiple-chip-label">COULEUR</InputLabel>
         <Select
+          style ={{paddingBottom: 2}}
           labelId="demo-mutiple-chip-label"
           id="demo-mutiple-chip"
           multiple
@@ -78,10 +82,6 @@ export default function MultipleSelect({ listVin, setlistVin, reload, setreload 
           ))}
         </Select>
       </FormControl>
-      <IconButton onClick={() => {setreload(!reload); setCouleurVin([])}} aria-label="Cancel">
-          <CancelIcon style={{ color: "#fdd835" }} />
-      </IconButton>
-
     </Grid>
   );
 }

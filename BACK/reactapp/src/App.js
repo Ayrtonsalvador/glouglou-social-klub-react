@@ -9,7 +9,7 @@ import Accueil from "./Accueil";
 
 // import MessagerieC from '../SrmessagerieC';
 import FavorisC from './SrC/FavorisC';
-// import ProfilC from '../SrprofilC';
+import ProfilC from './SrC//ProfilC';
 import CatalogueC from './SrC/CatalogueC';
 
 // import MessagerieV from '../SrmessagerieC';
@@ -36,7 +36,7 @@ function App() {
           <Route component={Accueil} path="/" exact />
           {/* <Route component={MessagerieC} path="/SrmessagerieC" exact /> */}
           <Route component={FavorisC} path="/FavorisC" exact />
-          {/* <Route component={ProfilC} path="/SrprofilC" exact /> */}
+          <Route component={ProfilC} path="/ProfilC" exact />
           <Route component={CatalogueC} path="/CatalogueC" exact />
 
           {/* <Route component={MessagerieV} path="/SrmessagerieV" exact /> */}

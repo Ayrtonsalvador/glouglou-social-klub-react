@@ -31,30 +31,30 @@ function NavigationC({addToken}) {
 
     return (
         <div className={classes.root}>
-        <AppBar position="fixed" color="#FFFFFF">
+        <AppBar position="fixed" color="#FFFFFF" style={{height:70}}>
           <Toolbar>
 
-            <div className={classes.title}>
-            <Typography  variant="h6" >
+            <div className={classes.title} style={{marginLeft:60}}>
+            <Typography  variant="h4" >
             <Link to='/CatalogueC' style={{ textDecoration: 'none', color:"#fdd835", marginRight:20}}>
               Catalogue
               </Link>
             </Typography>
 
-            <Typography  variant="h6" >
+            <Typography  variant="h4" >
             <Link to='/FavorisC' style={{ textDecoration: 'none', color:"#fdd835", marginRight:20}}>
               Mes favoris
               </Link>
             </Typography>
 
-             <Typography variant="h6" >
+             <Typography variant="h4" >
             <Link to='/MessagerieC' style={{ textDecoration: 'none', color:"#fdd835", marginRight:20}}>    
               Mes messages
               </Link>
             </Typography>          
             </div>
             <Button style={{ color:"#fdd835"}} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-            Mon profil
+            <Typography variant="h6" style={{fontWeight: "bold"}}> Mon profil </Typography>
             </Button>
             <Menu
                 id="simple-menu"

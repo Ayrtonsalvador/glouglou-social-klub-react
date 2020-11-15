@@ -4,24 +4,27 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import {MuiThemeProvider , createMuiTheme} from '@material-ui/core';
+import {MuiThemeProvider , createMuiTheme, responsiveFontSizes} from '@material-ui/core';
 import {yellow , grey} from '@material-ui/core/colors';
 
-const theme = createMuiTheme({
+let theme = createMuiTheme({
+
+  spacing: [2, 4, 8, 16, 32, 64],
+ 
   palette:{
     primary:{
-      main: yellow[600],
-      light: yellow[200],
-      dark: yellow[800]
+      main: yellow[700],
+      light: yellow[400],
+      dark: yellow[900]
     },
     secondary: {
       main : grey[800],
       light : grey[300],
       dark : grey[600]
-    },
-    spacing: [0, 4, 8, 16, 32, 64],}
-});
+    },},
 
+});
+theme = responsiveFontSizes(theme);
 
 ReactDOM.render(<MuiThemeProvider theme={theme}><App/></MuiThemeProvider>, document.getElementById('root'));
 
