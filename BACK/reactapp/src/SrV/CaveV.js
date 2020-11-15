@@ -3,46 +3,47 @@ import { Container } from 'reactstrap';
 import Grid from '@material-ui/core/Grid';
 
 import { connect } from 'react-redux';
-import NavigationC from '../Composants/NavigationC';
-import CardVin from '../Composants/CardVin';
+import NavigationV from '../Composants/NavigationV';
+import CardVigneron from '../Composants/CardVigneron';
 import MultipleSelect from '../Composants/MultipleSelect'
 
-function CatalogueC({ token, sendMessage, message, bouteille }) {
+function CaveV({ token, sendMessage, message, bouteille }) {
 
     const [listVin, setlistVin] = useState([])
-    const [reload, setreload] = useState(false)
+    const [deleted, setdeleted] = useState(false)
     
     // ${token}
     useEffect(() => {
         async function loadData() {
 
-            var rawResponse = await fetch(`/catalogue/47PlPYcfoj7eORElqNzEHYRhWKNRm9vo`);
+            var rawResponse = await fetch(`/macave/6r0oJJ3l1NL811RQIZNUaQs4aaLTfg1r`);
             var response = await rawResponse.json();
 
             if (response.result == true) {
-                setlistVin(response.catalogue);
+                setlistVin(response.cave);
+                console.log(response.cave);
             }
         }
         loadData()
-    }, [reload]);
+    }, [deleted]);
 
     return (
         <div>
             <Grid
                 container
                 direction="column" >
-                <NavigationC />
-                <MultipleSelect listVin={listVin} setlistVin={setlistVin} reload={reload} setreload={setreload}/>
+                <NavigationV/>
+                <MultipleSelect listVin={listVin} setlistVin={setlistVin} deleted={deleted} setdeleted={setdeleted}/>
             </Grid>
-            <Container fluid={true} style={{ paddingTop: 20, paddingLeft: 75, backgroundSize: 'cover', backgroundColor: "#f5f5f5" }}>    
+            <Container fluid={true} style={{ paddingTop: 20, paddingLeft: 75, height: '100vh', backgroundColor: "#f5f5f5" }}>    
                          <Grid container 
-                justify="flex-start"
-                alignItems="flex-start"
-                wrap="wrap"
->
+                                justify="flex-start"
+                                alignItems="flex-start"
+                                wrap="wrap"
+                >
                         {listVin.map((bouteille, i) => {
                             return (
-                                <CardVin key={i} bouteille={bouteille} />
+                                <CardVigneron key={i} bouteille={bouteille} />
                             )
                         })}
                         </Grid>
@@ -60,4 +61,4 @@ function mapStateToProps(state) {
 export default connect(
     mapStateToProps,
     null,
-)(CatalogueC);
+)(CaveV);

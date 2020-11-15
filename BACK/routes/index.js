@@ -110,6 +110,7 @@ router.post('/sign-in', async function (req, res, next) {
   var error = []
   var token = null
   var status = null
+  var domaine = null
 
   // CHAMPS VIDES
   if (req.body.emailFromFront == ''
@@ -154,13 +155,14 @@ router.post('/sign-in', async function (req, res, next) {
         result = true
         token = userVigneron.token
         status = userVigneron.Status
+        domaine = userVigneron.Domaine
       } else {
         result = false
         error.push('mot de passe ou email incorrect')
       }
     }
   }
-  res.json({ result, error, token, status })
+  res.json({ result, error, token, status, domaine })
 });
 
 // ---------------------- AJOUTER & SUPPR UNE REF --------------------\\
@@ -226,10 +228,10 @@ router.post('/AddVin', async function (req, res, next) {
 
 });
 
-router.get('/macave', async function (req, res, next) {
+router.get('/macave/:token', async function (req, res, next) {
 
   // Trouver les infos de la bouteille par vigneron
-  const user = await VigneronModel.findOne({ token: req.query.token })
+  const user = await VigneronModel.findOne({ token: req.params.token })
 
   if (user) {
     var ID = user._id;
@@ -253,16 +255,16 @@ router.get('/macave', async function (req, res, next) {
   }
 })
 
-router.delete('/delete-ref/:Nom', async function (req, res, next) {
+router.delete('/delete-ref/:nom', async function (req, res, next) {
 
   var result = false
 
-  var suppr = await BouteilleModel.deleteOne({ Nom: req.params.Nom })
+  var suppr = await BouteilleModel.deleteOne({ Nom: req.params.nom })
 
   if (suppr.deletedCount > 0) {
     result = true
   }
-
+console.log(result)
   res.json({ result })
 });
 
@@ -325,7 +327,7 @@ router.post('/info-update-v', async function (req, res, next) {
         Photo: CloudURL,
         Nom: user.Nom,
         Domaine: user.Domaine,
-        Ville: user.Ville,
+        Ville: user.ville,
         Region: user.Region,
         Desc: user.Desc
       }
@@ -333,14 +335,13 @@ router.post('/info-update-v', async function (req, res, next) {
     }
 
   }
-
   res.json({ result: true, infos })
 
 })
 
-router.get('/info-v', async function (req, res, next) {
+router.get('/info-v/:token', async function (req, res, next) {
 
-  const user = await VigneronModel.findOne({ token: req.query.token })
+  const user = await VigneronModel.findOne({ token: req.params.token })
 
   if (user != null) {
     res.json({ result: true, user })

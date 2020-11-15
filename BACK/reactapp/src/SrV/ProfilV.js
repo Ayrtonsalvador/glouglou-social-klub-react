@@ -1,53 +1,52 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import NavigationV from './NavigationV';
+import NavigationV from '../Composants/NavigationV';
 
 import { Container } from 'reactstrap';
-
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import Edit from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 
 import { connect } from 'react-redux';
 import AvatarEditor from 'react-avatar-editor'
 
-function ProfilV({ token }) {
+function ProfilV({ token, AddDomaine }) {
     const classes = useStyles();
     const [disabled, setDisabled] = useState(true);
 
-    const [nom, setNom] = useState("Nom prénom")
-    const [etablissement, setEtablissement] = useState("Nom d'etablissement")
+    const [nom, setNom] = useState("Nom Prénom")
+    const [domaine, setDomaine] = useState("Domaine")
     const [ville, setVille] = useState("Ville")
     const [region, setRegion] = useState("Région")
-    const [desc, setDesc] = useState("Petite decription de votre travail!")
+    const [desc, setDesc] = useState("Description")
 
-    const [URLimage, setURLimage] = useState("jaune.jpg")
+    const [URLimage, setURLimage] = useState(null)
 
     useEffect(() => {
         async function loadData() {
             //${token}
-            var rawResponse = await fetch(`/info-v/${token}`);
+            var rawResponse = await fetch(`/info-v/4gpgPMGHKIOSgVJamz9I5DEg8E3DjyCO`);
             var response = await rawResponse.json();
-            console.log("CAVISTE", response);
 
             if (response.result == true) {
 
                 setNom(response.user.Nom)
-                setEtablissement(response.user.Etablissement)
+                setDomaine(response.user.Domaine)
                 setVille(response.user.Ville)
                 setRegion(response.user.Region)
                 setDesc(response.user.Desc)
 
                 if (response.user.Photo != null) {
-                    setURLimage(response.user.Photo)
+                setURLimage(response.user.Photo)
+                } else {
+                setURLimage("jaune.jpg")
                 }
             }
         }
@@ -67,14 +66,14 @@ function ProfilV({ token }) {
     }
 
     const submitInfo = async () => {
-
+    
         var data = new FormData();
 
         data.append('avatar', URLimage);
 
         var userinfos = {
             nom: nom,
-            etablissement: etablissement,
+            domaine: domaine,
             ville: ville,
             region: region,
             desc: desc,
@@ -94,7 +93,7 @@ function ProfilV({ token }) {
 
     return (
         <div>
-            <NavigationC />
+            <NavigationV />
             <Container fluid={true} style={{ padding: 20, paddingTop: 80, width: "100%", height: "100vh", backgroundColor: "#f5f5f5" }}>
 
                 <Grid
@@ -118,7 +117,7 @@ function ProfilV({ token }) {
                         <Paper className={classes.paper}
                             style={{ fontWeight: "bold", marginBottom: 40, padding: 20 }}>
                             <h2>MON PROFIL</h2>
-                            <h5>{nom}</h5>
+                            <h5 style={{color: "#fdd835"}}>{nom}</h5>
                             <FormControlLabel
                                 control={
                                     <Switch
@@ -128,10 +127,8 @@ function ProfilV({ token }) {
                                         color="primary"
                                     />
                                 }
-                                label="Primary"
+                                label="Modifier"
                             />
-
-
                         </Paper>
 
                         <Paper className={classes.paper}
@@ -172,6 +169,8 @@ function ProfilV({ token }) {
 
                     <Grid container
                         direction="column"
+                        justify="center"
+                        alignItems="center"
                         xl={6}
                         xs={6}
                         style={{ margin: 50 }}>
@@ -180,10 +179,10 @@ function ProfilV({ token }) {
                             <form style={{ margin: 10 }} className={classes.rootfield} noValidate autoComplete="off">
 
                                 <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-disabled" label={nom} placeholder="Nom Prénom" variant="outlined" onChange={(e) => setNom(e.target.value)} />
-                                <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label={etablissement} placeholder="Nom d'etablissement" variant="outlined" onChange={(e) => setEtablissement(e.target.value)} />
+                                <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label={domaine} placeholder="Nom de domaine" variant="outlined" onChange={(e) => {setDomaine(e.target.value); AddDomaine(domaine)}} />
                                 <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label={region} placeholder="Région" variant="outlined" onChange={(e) => setRegion(e.target.value)} />
                                 <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label={ville} placeholder="Ville" variant="outlined" onChange={(e) => setVille(e.target.value)} />
-                                <TextField style={{ margin: 10, width: 600 }} rows={5} disabled={disabled} id="standard-textarea" label="Description" placeholder={desc} onChange={(e) => setDesc(e.target.value)} multiline />
+                                <TextField style={{ margin: 10, width: 600 }} rows={5} disabled={disabled} id="standard-textarea" label="Description" defaultValue={desc} onChange={(e) => setDesc(e.target.value)} multiline />
 
                                 <Button disabled={disabled} color="primary" component="span" onClick={() => {submitInfo()}}>
                                     <h5 style={{ margin: 0 }}>Editer</h5>
@@ -192,7 +191,6 @@ function ProfilV({ token }) {
                                     </IconButton>
                                 </Button>
                             </form>
-
                         </Paper>
                     </Grid>
 
@@ -227,11 +225,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+function mapDispatchToProps(dispatch) {
+    return {
+        addDomaine: function (domaine) {
+            dispatch({ type: 'addDomaine', domaine: domaine })
+        }
+    }
+}
+
 function mapStateToProps(state) {
     return { token: state.token }
 }
 
 export default connect(
     mapStateToProps,
-    null,
+    mapDispatchToProps,
 )(ProfilV);

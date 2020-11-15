@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
-import { Container, Row, Form, FormGroup, Label, FormText } from 'reactstrap';
+import { Container } from 'reactstrap';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -11,9 +14,7 @@ import { autoPlay } from 'react-swipeable-views-utils';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import clsx from 'clsx';
 import IconButton from '@material-ui/core/IconButton';
-import Input from '@material-ui/core/Input';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -22,13 +23,9 @@ import TextField from '@material-ui/core/TextField';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom'
-
-function Accueil({ addStatus, addToken, userstatus, token }) {
+function Accueil({ addStatus, addToken, userstatus, token, addDomaine, domaine }) {
 
     const classes = useStyles();
-    const [index, setIndex] = useState(0);
 
     // -------------CARROUEL------------- \\
     const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
@@ -150,6 +147,10 @@ function Accueil({ addStatus, addToken, userstatus, token }) {
             setErrorsSignin(response.error);
             seterror(true)
         }
+
+        if (response.domaine != null) {
+            addDomaine(response.domaine)
+        }
     }
 
     const [values, setValues] = React.useState({
@@ -224,8 +225,9 @@ function Accueil({ addStatus, addToken, userstatus, token }) {
                     </Grid>
 
                     <Grid container direction="row" alignItems="center" >
+                   
                         <Grid>
-                            <Button style={{ backgroundColor: "#fdd835", color: "#FFFFFF", marginTop: 20, outline: 'none' }} variant="outlined" color="primary" onClick={handleOpenSignIn}>Connexion</Button>
+                            <Button style={{ backgroundColor: "#fdd835", color: "#FFFFFF", marginTop: 20, outline: 'none' }} variant="outlined" color="primary"  onClick={handleOpenSignIn} >Connexion</Button>
                             <Modal
 
                                 aria-labelledby="transition-modal-title"
@@ -250,7 +252,7 @@ function Accueil({ addStatus, addToken, userstatus, token }) {
                                             <h5 id="transition-modal-title">J'ai un compte</h5>
 
                                             <TextField style={{ width: 300, marginBottom: 10, marginTop: 10 }} error={error} id="outlined-basic" label="Email" placeholder="@Glouglou.com" 
-                                            variant="outlined" onChange={(e) => setSignInEmail(e.target.value)} helperText={{tabErrorsSignin}}/>
+                                            variant="outlined" onChange={(e) => setSignInEmail(e.target.value)} helperText={tabErrorsSignin}/>
                                             <FormControl variant="outlined" style={{ width: 300 }} >
                                                 <InputLabel htmlFor="outlined-adornment-password">Mot de passe</InputLabel>
                                                 <OutlinedInput
@@ -283,8 +285,8 @@ function Accueil({ addStatus, addToken, userstatus, token }) {
                                 </Fade>
                             </Modal>
                         </Grid>
-
                         <Grid>
+                        
                             <Button style={{ marginLeft: 20, marginTop: 20, color: "#FFFFFF" }} variant="outlined" onClick={handleOpenSignUp}>Je m'inscris</Button>
                             <Modal
                                 aria-labelledby="transition-modal-title"
@@ -309,7 +311,7 @@ function Accueil({ addStatus, addToken, userstatus, token }) {
                                             variant="outlined" onChange={(e) => setSignUpEmail(e.target.value)} />
 
                                         <TextField style={{ width: 300, marginBottom: 10, marginTop: 10 }} error={error} id="outlined-basic" label="Telephone" placeholder="Telephone"
-                                            variant="outlined" onChange={(e) => setSignUpTel(e.target.value)} helperText={{tabErrorsSignup}} />
+                                            variant="outlined" onChange={(e) => setSignUpTel(e.target.value)} helperText={tabErrorsSignup} />
 
                                         <FormControl variant="outlined" style={{ width: 300 }} >
                                             <InputLabel htmlFor="outlined-adornment-password">Mot de passe</InputLabel>
@@ -411,6 +413,9 @@ function mapDispatchToProps(dispatch) {
         },
         addStatus: function (status) {
             dispatch({ type: 'addStatus', status: status })
+        },
+        addDomaine: function (domaine) {
+            dispatch({ type: 'addDomaine', domaine: domaine })
         }
     }
 }

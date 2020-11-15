@@ -7,8 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom'
 
-import NavigationC from './NavigationC';
-import CardFavoris from './CardFavoris';
+import NavigationC from '../Composants/NavigationC';
+import CardFavoris from '../Composants/CardFavoris';
 import CaveVide from './CaveVide'
 
 function Favoris({ token, favoris }) {

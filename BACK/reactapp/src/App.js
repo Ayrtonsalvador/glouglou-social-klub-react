@@ -13,18 +13,19 @@ import ProfilC from './SrC//ProfilC';
 import CatalogueC from './SrC/CatalogueC';
 
 // import MessagerieV from '../SrmessagerieC';
-import CaveV from './SrV/SrcaveV';
-// import ProfilV from '../SrprofilV';
-// import BouteilleV from '../SrbouteilleV';
+import CaveV from './SrV/CaveV';
+import ProfilV from './SrV/ProfilV';
+import BouteilleV from './SrV/BouteilleV';
 
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import userstatus from './reducers/userstatus';
 import token from './reducers/token';
+import domaine from './reducers/domaine';
 // import message from './reducers/messageRead';
 // import messageSend from './reducers/messageSend';
 
-const store = createStore(combineReducers({ userstatus, token }));
+const store = createStore(combineReducers({ userstatus, token, domaine }));
 
 function App() {
   return (
@@ -41,8 +42,8 @@ function App() {
 
           {/* <Route component={MessagerieV} path="/SrmessagerieV" exact /> */}
           <Route component={CaveV} path="/CaveV" exact />
-          {/* <Route component={ProfilV} path="/SrprofilV" exact /> */}
-          {/* <Route component={BouteilleV} path="/SrbouteilleV" exact /> */}
+          <Route component={ProfilV} path="/ProfilV" exact />
+          <Route component={BouteilleV} path="/BouteilleV" exact />
         </Switch>
       </Router>
 

@@ -1,64 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import NavigationC from '../Composants/NavigationC';
+import NavigationV from '../Composants/NavigationV';
 
 import { Container } from 'reactstrap';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import Edit from '@material-ui/icons/Edit';
+import Done from '@material-ui/icons/Done';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
 
+import { connect } from 'react-redux';
 import AvatarEditor from 'react-avatar-editor'
 
-function ProfilC({ token }) {
+function BouteilleV({ token, domaine }) {
     const classes = useStyles();
     const [disabled, setDisabled] = useState(true);
 
-    const [nom, setNom] = useState("Nom prénom")
-    const [etablissement, setEtablissement] = useState("Nom d'etablissement")
-    const [ville, setVille] = useState("Ville")
-    const [region, setRegion] = useState("Région")
-    const [desc, setDesc] = useState("Petite description de votre travail!")
+    const [NomRef, setNomRef] = useState("Nom de la référence");
+    const [Couleur, setCouleur] = useState("Couleur");
+    const [Cepage, setCepage] = useState("Cepage");
+    const [Millesime, setMillesime] = useState("Millesime");
+    const [Appellation, setAppellation] = useState("Appellatton");
+    const [Desc, setDesc] = useState("Quelques mots sur votre vin, son carractère, ses associations...");
 
-    const [URLimage, setURLimage] = useState(null)
-
-    useEffect(() => {
-        async function loadData() {
-            //${token}
-            var rawResponse = await fetch(`/info-c/47PlPYcfoj7eORElqNzEHYRhWKNRm9vo`);
-            var response = await rawResponse.json();
-            console.log("CAVISTE", response);
-
-            if (response.result == true) {
-
-                setNom(response.user.Nom)
-                setEtablissement(response.user.Etablissement)
-                setVille(response.user.Ville)
-                setRegion(response.user.Region)
-                setDesc(response.user.Desc)
-
-                if (response.user.Photo != null) {
-                setURLimage(response.user.Photo)
-                } else {
-                setURLimage("jaune.jpg")
-                }
-            }
-        }
-        loadData()
-    }, []);
+    const [URLimage, setURLimage] = useState("jaune.jpg")
 
     // CHECKED BUTTON
-    const [state, setState] = React.useState({checked: false});
+    const [state, setState] = React.useState({ checked: false });
     const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
         setDisabled(!disabled)
+    };
+
+    // SELECTED BUTTON
+    const ListCouleur = [
+        { value: 'Rouge' },
+        { value: 'Blanc' },
+        { value: 'Rosé' },
+        { value: 'Bulles' },
+    ]
+
+    const handleCouleur = (event) => {
+        setCouleur(event.target.value);
+
     };
 
     // SUBMIT INFOS
@@ -67,34 +57,34 @@ function ProfilC({ token }) {
     }
 
     const submitInfo = async () => {
-    
+
         var data = new FormData();
 
         data.append('avatar', URLimage);
 
-        var userinfos = {
-            nom: nom,
-            etablissement: etablissement,
-            ville: ville,
-            region: region,
-            desc: desc,
-            token: token
+        var bottleinfos = {
+            NomRef: NomRef,
+            Couleur: Couleur,
+            Cepage: Cepage,
+            Millesime: Millesime,
+            AOC: Appellation,
+            Desc: Desc,
+            token: token,
         };
 
-        data.append('userinfos', JSON.stringify(userinfos));
+        data.append('bottleinfos', JSON.stringify(bottleinfos));
 
-        var updateUser = await fetch(`/info-update-c`, {
+        var newbottle = await fetch(`/AddVin`, {
             method: 'post',
             body: data
         })
 
-        var response = await updateUser.json();
-        console.log('responseFB', response)
     }
+
 
     return (
         <div>
-            <NavigationC />
+            <NavigationV />
             <Container fluid={true} style={{ padding: 20, paddingTop: 80, width: "100%", height: "100vh", backgroundColor: "#f5f5f5" }}>
 
                 <Grid
@@ -112,13 +102,13 @@ function ProfilC({ token }) {
                         spacing={4}
                         xl={4}
                         xs={4}
-                        style={{ margin : 50 }}
+                        style={{ margin: 50 }}
                     >
 
                         <Paper className={classes.paper}
                             style={{ fontWeight: "bold", marginBottom: 40, padding: 20 }}>
-                            <h2>MON PROFIL</h2>
-                            <h5 style={{color: "#fdd835"}}>{nom}</h5>
+                            <h2>MA CAVE</h2>
+                            <h5 style={{ color: "#fdd835" }}>{domaine}</h5>
                             <FormControlLabel
                                 control={
                                     <Switch
@@ -128,17 +118,15 @@ function ProfilC({ token }) {
                                         color="primary"
                                     />
                                 }
-                                label="Modifier"
+                                label="Ajouter"
                             />
-
-
                         </Paper>
 
                         <Paper className={classes.paper}
                         >
                             <AvatarEditor
                                 image={URLimage}
-                                width={200}
+                                width={400}
                                 height={200}
                                 border={0}
                                 color={[255, 255, 255, 0.6]}
@@ -154,11 +142,11 @@ function ProfilC({ token }) {
                                     multiple
                                     type="file"
                                     onChange={URL}
-                                    disabled={disabled} 
+                                    disabled={disabled}
                                 />
                                 <label htmlFor="contained-button-file">
                                     <Button disabled={disabled} style={{ margin: 10 }} color="primary" component="span">
-                                        <h5  style={{ margin: 0 }}>Charger</h5>
+                                        <h5 style={{ margin: 0 }}>Charger</h5>
                                         <IconButton disabled={disabled} color="primary" aria-label="upload picture" component="span">
                                             <PhotoCamera />
                                         </IconButton>
@@ -178,19 +166,38 @@ function ProfilC({ token }) {
                         xs={6}
                         style={{ margin: 50 }}>
                         <Paper className={classes.paper} style={{ marginBottom: 40, padding: 20 }}>
-                            <h2>MES INFOS</h2>
+                            <h2>MA BOUTEILLE</h2>
                             <form style={{ margin: 10 }} className={classes.rootfield} noValidate autoComplete="off">
 
-                                <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-disabled" label={nom} placeholder="Nom Prénom" variant="outlined" onChange={(e) => setNom(e.target.value)} />
-                                <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label={etablissement} placeholder="Nom d'etablissement" variant="outlined" onChange={(e) => setEtablissement(e.target.value)} />
-                                <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label={region} placeholder="Région" variant="outlined" onChange={(e) => setRegion(e.target.value)} />
-                                <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label={ville} placeholder="Ville" variant="outlined" onChange={(e) => setVille(e.target.value)} />
-                                <TextField style={{ margin: 10, width: 600 }} rows={5} disabled={disabled} id="standard-textarea" label="Description" defaultValue={desc} onChange={(e) => setDesc(e.target.value)} multiline />
+                                <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-disabled" label={NomRef} placeholder="Nom de la référence" variant="outlined" onChange={(e) => setNomRef(e.target.value)} />
 
-                                <Button disabled={disabled} color="primary" component="span" onClick={() => {submitInfo()}}>
-                                    <h5 style={{ margin: 0 }}>Editer</h5>
+                                <TextField
+                                    style={{ margin: 10, width: 600 }}
+                                    id="outlined-select-currency"
+                                    select
+                                    label="Couleur"
+                                    value={Couleur}
+                                    onChange={(e) => setCouleur(e.target.value)}
+                                    helperText="Choisir une couleur"
+                                    variant="outlined"
+                                >
+                                    {ListCouleur.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.value}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+
+                                <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label="Cepage" placeholder="Cepage" variant="outlined" onChange={(e) => setCepage(e.target.value)} />
+                                <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label="Appellation" placeholder="Appellation" variant="outlined" onChange={(e) => setAppellation(e.target.value)} />
+                                <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label="Millesime" placeholder="Millesime" variant="outlined" onChange={(e) => setMillesime(e.target.value)} />
+
+                                <TextField style={{ margin: 10, width: 600 }} rows={5} disabled={disabled} id="standard-textarea" label="Description" placeholder="Quelques mots sur votre vin, son carractère, ses associations..." onChange={(e) => setDesc(e.target.value)} multiline />
+
+                                <Button disabled={disabled} color="primary" component="span" onClick={() => { submitInfo(); setNomRef(""); setCouleur(""); setCepage(""); setAppellation(""); setMillesime(""); setDesc("") }}>
+                                    <h5 style={{ margin: 0 }}>Referencer</h5>
                                     <IconButton disabled={disabled} color="primary" aria-label="upload picture" component="span">
-                                        <Edit/>
+                                        <Done />
                                     </IconButton>
                                 </Button>
                             </form>
@@ -229,10 +236,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function mapStateToProps(state) {
-    return { token: state.token }
+    return { token: state.token, domaine: state.domaine }
 }
 
 export default connect(
     mapStateToProps,
     null,
-)(ProfilC);
+)(BouteilleV);
