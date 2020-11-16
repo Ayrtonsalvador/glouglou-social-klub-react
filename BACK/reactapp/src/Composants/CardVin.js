@@ -50,7 +50,7 @@ function CardVin({ bouteille, token }) {
     // -------------MAP CATALOGUE------------- \\  
 
     return (
-        <Grid item xs={6} md={4} xl={2} spacing={2} >
+        <Grid item xs={6} md={3} xl={2} spacing={2} >
             <Card className={classes.root} style={{ margin: 10 }}>
                 <CardHeader
                     id={bouteille._id}
@@ -125,7 +125,6 @@ const useStyles = makeStyles((theme) => ({
     media: {
         height: 0,
         paddingTop: '56.25%', // 16:9
-
     },
     expand: {
         transform: 'rotate(0deg)',

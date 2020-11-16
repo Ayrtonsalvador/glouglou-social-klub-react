@@ -95,7 +95,7 @@ function ProfilC({ token }) {
     return (
         <div>
             <NavigationC />
-            <Container fluid={true} style={{ padding: 20, paddingTop: 80, width: "100%", height: "100vh", backgroundColor: "#f5f5f5" }}>
+            <Container fluid={true} style={{ padding: 20, paddingTop: 80, width: "100%", height: '100%', backgroundColor: "#f5f5f5" }}>
 
             <Grid
                     container

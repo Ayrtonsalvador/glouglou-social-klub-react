@@ -39,7 +39,7 @@ function CardFavoris({ bouteille, token, setdeleted, deleted }) {
     // -------------MAP CATALOGUE------------- \\  
 
     return (
-        <Grid item xs={6} md={2} xl={2} spacing={2}>
+        <Grid item xs={6} md={3} xl={2} spacing={2} >
         <Card className={classes.root} style={{ margin: 10 }}>
             <CardHeader
                 id={bouteille._id}
@@ -109,10 +109,6 @@ function CardFavoris({ bouteille, token, setdeleted, deleted }) {
 }
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        whiteSpace: 'wrap',
-        marginBottom: theme.spacing(1),
-    },
     media: {
         height: 0,
         paddingTop: '56.25%', // 16:9

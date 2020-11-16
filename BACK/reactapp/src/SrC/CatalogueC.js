@@ -12,7 +12,6 @@ function CatalogueC({ token, sendMessage, message, bouteille }) {
     const [listVin, setlistVin] = useState([])
     const [reload, setreload] = useState(false)
 
-    // ${token}
     useEffect(() => {
         async function loadData() {
 
@@ -20,7 +19,7 @@ function CatalogueC({ token, sendMessage, message, bouteille }) {
             var response = await rawResponse.json();
 
             if (response.result == true) {
-                setlistVin(response.catalogue);
+             setlistVin(response.catalogue);
             }
         }
         loadData()
@@ -35,7 +34,7 @@ function CatalogueC({ token, sendMessage, message, bouteille }) {
                 <NavigationC />
                 <MultipleSelect listVin={listVin} setlistVin={setlistVin} reload={reload} setreload={setreload} />
             </Grid>
-            <Container fluid={true} style={{ paddingTop: 20, paddingLeft: 75, backgroundSize: 'cover', backgroundColor: "#f5f5f5" }}>
+            <Container fluid={true} style={{ backgroundSize: 'cover', backgroundColor: "#f5f5f5" }}>
                 <Grid container
                     justify="flex-start"
                     alignItems="flex-start"

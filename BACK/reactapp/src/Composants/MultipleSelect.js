@@ -29,12 +29,15 @@ function getStyles(name, personName, theme) {
 }
 
 export default function MultipleSelect({ listVin, setlistVin, reload, setreload }) {
+
   const classes = useStyles();
   const theme = useTheme();
   const [CouleurVin, setCouleurVin] = React.useState([]);
 
   const handleChange = async (event) => {
-    setCouleurVin(event.target.value);
+
+    setCouleurVin(event.target.value)
+    console.log(event.target.value)
 
     var rawresponse = await fetch(`/filtre`, {
       method: 'POST',
@@ -42,34 +45,21 @@ export default function MultipleSelect({ listVin, setlistVin, reload, setreload 
       body: `filtreFF=${event.target.value}`
     });
     var response = await rawresponse.json();
-    var filtre = response.bouteilles
+    console.log("responseFB", response);
 
-    var PREMIER = [];
-    var nvxfiltre = [];
+    if (response.result== true) {
+    setlistVin(response.Tabfiltre)
+  }
+  }
 
-    for (var i = 0; i < filtre.length; i++) {
-      PREMIER = filtre[i]
-      console.log("PREMIER", PREMIER)
-    }
-
-    if (PREMIER.length > 1) {
-
-      for (var i = 0; i < PREMIER.length; i++) {
-        console.log("DEUXIEME", PREMIER[i])
-      }
-
-      //   nvxfiltre.push(PREMIER[i])
-      // console.log(nvxfiltre)
-    }}
-
-    return (
+     return (
       <Grid container
         direction="row"
         justify="flex-start"
         alignItems="flex-end"
         style={{ paddingTop: 70, paddingBottom: 10, paddingLeft: 63 }} >
 
-        <IconButton onClick={() => { setreload(!reload); setCouleurVin([]) }} aria-label="Cancel">
+        <IconButton style={{ outline: "none" }} onClick={() => { setreload(!reload); setCouleurVin([]) }} aria-label="Cancel">
           <CancelIcon style={{ color: "#fdd835" }} />
         </IconButton>
 

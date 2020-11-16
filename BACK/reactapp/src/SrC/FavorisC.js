@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container } from 'reactstrap';
 import Paper from '@material-ui/core/Paper';
-import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 
 import { connect } from 'react-redux';
@@ -9,13 +8,11 @@ import { Link, Redirect } from 'react-router-dom'
 
 import NavigationC from '../Composants/NavigationC';
 import CardFavoris from '../Composants/CardFavoris';
-import CaveVide from './CaveVide'
 
 function Favoris({ token, favoris }) {
 
     const [listVin, setlistVin] = useState([])
     const [deleted, setdeleted] = useState(true)
-    const [vide, setvide] = useState(false)
 
     useEffect(() => {
         // ${token}
@@ -27,7 +24,6 @@ function Favoris({ token, favoris }) {
             if (response.result == true) {
                 var favoris = response.favCaviste.Favoris;
                 setlistVin(favoris);
-                console.log('FAVORIS', favoris);
             }
 
         }
@@ -35,13 +31,22 @@ function Favoris({ token, favoris }) {
     }, [deleted]);
 
 
-    if (listVin.length == 0 && !vide) {
-        setvide(true)
-        console.log("VIDE", vide);
+    var background = ""
+
+    if (listVin.length == 0) {
+
+        background = { height: '100vh', paddingLeft: 75, backgroundImage: "url(" + "cavevide.png" + ")",
+        backgroundPosition: 'center',
+        backgroundSize: '600px 600px',
+        backgroundRepeat: 'no-repeat'
     }
-    if (listVin.length > 0 && vide) {
-        setvide(false)
-        console.log("PAS VIDE", vide);
+
+    console.log(background)
+    } else  {
+
+        background = { paddingTop: 90, paddingLeft: 75, backgroundColor: "#f5f5f5", height:'auto'}
+        console.log(background)
+    
     }
 
     return (
@@ -52,16 +57,15 @@ function Favoris({ token, favoris }) {
                 >
                 <NavigationC />
             </Grid>
-            <Container fluid={true} style={{ paddingTop: 90, paddingLeft: 75, backgroundColor: "#f5f5f5", height:'auto'}}>
+            <Container fluid={true} style={background}>
             <Grid container   
                     justify="flex-start"
                     alignItems="flex-start"
                     wrap="wrap"
                     >
                     {listVin.map((bouteille, i) => {
-                        return (<CardFavoris key={i} bouteille={bouteille} vide={vide} deleted={deleted} setdeleted={setdeleted} />)
+                        return (<CardFavoris key={i} bouteille={bouteille} deleted={deleted} setdeleted={setdeleted} />)
                     })}
-                    {/* <CaveVide/> */}
                 </Grid>
             </Container>
 

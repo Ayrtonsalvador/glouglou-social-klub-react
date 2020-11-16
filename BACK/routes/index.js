@@ -267,7 +267,7 @@ router.delete('/delete-ref/:nom', async function (req, res, next) {
 router.post('/modif-ref', async function (req, res, next) {
 
   var bottleinfosFB = JSON.parse(req.body.bottleinfos)
-  
+
   var updatebottle = await BouteilleModel.updateOne(
     { _id: bottleinfosFB._id }, {
 
@@ -281,22 +281,22 @@ router.post('/modif-ref', async function (req, res, next) {
 
   if (updatebottle) {
 
-  const vigneron = await VigneronModel.findOne({ token: bottleinfosFB.token })
+    const vigneron = await VigneronModel.findOne({ token: bottleinfosFB.token })
 
-  if (vigneron) {
+    if (vigneron) {
 
-    var ID = vigneron._id;
-    var cave = await BouteilleModel.find({ IdVigneron: ID })
-      .populate('IdVigneron')
-      .exec();
+      var ID = vigneron._id;
+      var cave = await BouteilleModel.find({ IdVigneron: ID })
+        .populate('IdVigneron')
+        .exec();
 
-    if (cave != null) {
-      res.json({ result: true, cave })
-    } else {
-      res.json({ result: false })
+      if (cave != null) {
+        res.json({ result: true, cave })
+      } else {
+        res.json({ result: false })
+      }
     }
   }
-}
 })
 
 // ------------------------ INFOS VIGNERON ------------------------ \\
@@ -628,25 +628,21 @@ router.get('/catalogue/:token', async function (req, res, next) {
 })
 
 router.post('/filtre', async function (req, res, next) {
- 
-  var filtre =  req.body.filtreFF
-  var couleur = filtre.split(',')
-  const bouteilles = []
 
-  for (i=0; i < couleur.length ; i++) {
+  var filtre = req.body.filtreFF
+  var couleur = filtre.split(',')
+  var Tabfiltre = [];
+
+  for (i = 0; i < couleur.length; i++) {
 
     const bouteille = await BouteilleModel.find({ Couleur: couleur[i] })
-    .populate('IdVigneron')
-    .exec()
-
-    if (bouteille) {
-      bouteilles.push(bouteille)
+      .populate('IdVigneron')
+      .exec()
+         Tabfiltre = [...Tabfiltre, ...bouteille] 
     }
-    console.log("BOUTEILLE", bouteilles)
-  } 
 
-  if (bouteilles != null) {
-    res.json({ result: true, bouteilles })
+  if (Tabfiltre != null) {
+    res.json({ result: true, Tabfiltre })
 
   } else {
 

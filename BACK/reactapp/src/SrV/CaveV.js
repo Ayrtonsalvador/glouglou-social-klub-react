@@ -26,6 +26,24 @@ function CaveV({ token, sendMessage, message, bouteille }) {
         loadData()
     }, [reload]);
 
+    var background = ""
+
+    if (listVin.length == 0) {
+
+        background = { height: '100vh', paddingTop: 80, paddingLeft: 50, backgroundImage: "url(" + "cavevide.png" + ")",
+        backgroundPosition: 'center',
+        backgroundSize: '600px 600px',
+        backgroundRepeat: 'no-repeat'
+    }
+
+    console.log(background)
+    } else  {
+
+        background = {paddingTop: 80, paddingLeft: 50, height: 'auto', backgroundColor: "#f5f5f5"}
+        console.log(background)
+    
+    }
+
     return (
         <div>
             <Grid
@@ -33,10 +51,9 @@ function CaveV({ token, sendMessage, message, bouteille }) {
                 direction="column" >
                 <NavigationV/>
             </Grid>
-            <Container fluid={true} style={{ paddingTop: 80, paddingLeft: 50, height: 'auto', backgroundColor: "#f5f5f5" }}>    
+            <Container fluid={true} style={background}>    
                          <Grid container 
-                         direction= "column-reverse"
-                                justify="flex-end"
+                                justify="flex-start"
                                 alignItems="flex-start"
                                 wrap="wrap"
                 >
