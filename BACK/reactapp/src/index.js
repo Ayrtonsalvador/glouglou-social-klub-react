@@ -9,7 +9,7 @@ import {yellow , grey} from '@material-ui/core/colors';
 
 let theme = createMuiTheme({
 
-  spacing: [2, 4, 8, 16, 32, 64],
+  spacing: 10,
  
   palette:{
     primary:{

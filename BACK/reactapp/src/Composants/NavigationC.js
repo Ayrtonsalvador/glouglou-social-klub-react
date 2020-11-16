@@ -30,7 +30,7 @@ function NavigationC({addToken}) {
         <AppBar position="fixed" color="#FFFFFF" style={{height:70}}>
           <Toolbar>
 
-            <div className={classes.title} style={{marginLeft:60}}>
+            <div className={classes.title} style={{marginLeft:50, marginRight:60}}>
             <Typography  variant="h4" >
             <Link to='/CatalogueC' style={{ textDecoration: 'none', color:"#fdd835", marginRight:20}}>
               Catalogue

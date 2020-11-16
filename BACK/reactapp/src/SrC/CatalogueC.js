@@ -11,12 +11,12 @@ function CatalogueC({ token, sendMessage, message, bouteille }) {
 
     const [listVin, setlistVin] = useState([])
     const [reload, setreload] = useState(false)
-    
+
     // ${token}
     useEffect(() => {
         async function loadData() {
 
-            var rawResponse = await fetch(`/catalogue/47PlPYcfoj7eORElqNzEHYRhWKNRm9vo`);
+            var rawResponse = await fetch(`/catalogue/${token}`);
             var response = await rawResponse.json();
 
             if (response.result == true) {
@@ -30,23 +30,24 @@ function CatalogueC({ token, sendMessage, message, bouteille }) {
         <div>
             <Grid
                 container
-                direction="column" >
+                direction="column"
+            >
                 <NavigationC />
-                <MultipleSelect listVin={listVin} setlistVin={setlistVin} reload={reload} setreload={setreload}/>
+                <MultipleSelect listVin={listVin} setlistVin={setlistVin} reload={reload} setreload={setreload} />
             </Grid>
-            <Container fluid={true} style={{ paddingTop: 20, paddingLeft: 75, backgroundSize: 'cover', backgroundColor: "#f5f5f5" }}>    
-                         <Grid container 
-                justify="flex-start"
-                alignItems="flex-start"
-                wrap="wrap"
->
-                        {listVin.map((bouteille, i) => {
-                            return (
-                                <CardVin key={i} bouteille={bouteille} />
-                            )
-                        })}
-                        </Grid>
-              
+            <Container fluid={true} style={{ paddingTop: 20, paddingLeft: 75, backgroundSize: 'cover', backgroundColor: "#f5f5f5" }}>
+                <Grid container
+                    justify="flex-start"
+                    alignItems="flex-start"
+                    wrap="wrap"
+                >
+                    {listVin.map((bouteille, i) => {
+                        return (
+                            <CardVin key={i} bouteille={bouteille} />
+                        )
+                    })}
+                </Grid>
+
             </Container>
 
         </div>

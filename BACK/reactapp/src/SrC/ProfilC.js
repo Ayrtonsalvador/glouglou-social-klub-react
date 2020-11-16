@@ -97,7 +97,7 @@ function ProfilC({ token }) {
             <NavigationC />
             <Container fluid={true} style={{ padding: 20, paddingTop: 80, width: "100%", height: "100vh", backgroundColor: "#f5f5f5" }}>
 
-                <Grid
+            <Grid
                     container
                     direction="row"
                     justify="center"
@@ -105,18 +105,19 @@ function ProfilC({ token }) {
                     wrap="nowrap"
                 >
 
-                    <Grid
+<Grid
                         container
                         direction="column"
-                        justify="space-between"
+                        justify="flex-start"
+                        alignItems="space-between"
                         spacing={4}
-                        xl={4}
-                        xs={4}
-                        style={{ margin : 50 }}
+                        item xl={4}
+                        item xs={4}
                     >
 
                         <Paper className={classes.paper}
-                            style={{ fontWeight: "bold", marginBottom: 40, padding: 20 }}>
+                                                        style={{ fontWeight: "bold", marginTop: 65, marginBottom: 40, padding: 20 }}>
+
                             <h2>MON PROFIL</h2>
                             <h5 style={{color: "#fdd835"}}>{nom}</h5>
                             <FormControlLabel
@@ -169,13 +170,12 @@ function ProfilC({ token }) {
                         </Paper>
                     </Grid>
 
-
                     <Grid container
                         direction="column"
-                        justify="center"
-                        alignItems="center"
-                        xl={6}
-                        xs={6}
+                        justify="space-between"
+                        alignItems="flex-start"
+                        item xl={3}
+                        item xs={6}
                         style={{ margin: 50 }}>
                         <Paper className={classes.paper} style={{ marginBottom: 40, padding: 20 }}>
                             <h2>MES INFOS</h2>

@@ -28,9 +28,8 @@ function CardFavoris({ bouteille, token, setdeleted, deleted }) {
         setExpanded(!expanded);
     };
 
-    //   ${token}
     const deleteFavoris = async () => {
-        var rawResponse = await fetch(`/delete-favoris/${bouteille.Nom}/47PlPYcfoj7eORElqNzEHYRhWKNRm9vo`, {
+        var rawResponse = await fetch(`/delete-favoris/${bouteille.Nom}/${token}`, {
             method: 'DELETE'
         });
         var response = await rawResponse.json();

@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
+
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import NavigationV from '../Composants/NavigationV';
+
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 
 import { Container } from 'reactstrap';
 import Button from '@material-ui/core/Button';
@@ -22,12 +28,12 @@ function BouteilleV({ token, domaine }) {
     const classes = useStyles();
     const [disabled, setDisabled] = useState(true);
 
-    const [NomRef, setNomRef] = useState("Nom de la référence");
-    const [Couleur, setCouleur] = useState("Couleur");
-    const [Cepage, setCepage] = useState("Cepage");
-    const [Millesime, setMillesime] = useState("Millesime");
-    const [Appellation, setAppellation] = useState("Appellatton");
-    const [Desc, setDesc] = useState("Quelques mots sur votre vin, son carractère, ses associations...");
+    const [NomRef, setNomRef] = useState("Non renseigné");
+    const [Couleur, setCouleur] = useState("Non renseigné");
+    const [Cepage, setCepage] = useState("Non renseigné");
+    const [Millesime, setMillesime] = useState("Non renseigné");
+    const [Appellation, setAppellation] = useState("Non renseigné");
+    const [Desc, setDesc] = useState("Non renseigné");
 
     const [URLimage, setURLimage] = useState("jaune.jpg")
 
@@ -38,6 +44,17 @@ function BouteilleV({ token, domaine }) {
         setDisabled(!disabled)
     };
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        return <Redirect to='/CaveV' />
+        setOpen(false);
+    };
+
     // SELECTED BUTTON
     const ListCouleur = [
         { value: 'Rouge' },
@@ -46,10 +63,6 @@ function BouteilleV({ token, domaine }) {
         { value: 'Bulles' },
     ]
 
-    const handleCouleur = (event) => {
-        setCouleur(event.target.value);
-
-    };
 
     // SUBMIT INFOS
     const URL = (event) => {
@@ -79,34 +92,41 @@ function BouteilleV({ token, domaine }) {
             body: data
         })
 
+        setNomRef("");
+        setCouleur("");
+        setCepage("");
+        setAppellation("");
+        setMillesime("");
+        setDesc("")
     }
-
 
     return (
         <div>
             <NavigationV />
             <Container fluid={true} style={{ padding: 20, paddingTop: 80, width: "100%", height: "100vh", backgroundColor: "#f5f5f5" }}>
-
                 <Grid
                     container
                     direction="row"
                     justify="center"
                     alignItems="flex-start"
                     wrap="nowrap"
+                    spacing={6}
                 >
 
                     <Grid
                         container
                         direction="column"
-                        justify="space-between"
+                        justify="flex-start"
+                        alignItems="space-between"
                         spacing={4}
-                        xl={4}
-                        xs={4}
-                        style={{ margin: 50 }}
+                        item xl={4}
+                        item xs={4}
                     >
 
+
                         <Paper className={classes.paper}
-                            style={{ fontWeight: "bold", marginBottom: 40, padding: 20 }}>
+                            style={{ fontWeight: "bold", marginTop: 65, marginBottom: 40, padding: 20 }}>
+
                             <h2>MA CAVE</h2>
                             <h5 style={{ color: "#fdd835" }}>{domaine}</h5>
                             <FormControlLabel
@@ -152,7 +172,7 @@ function BouteilleV({ token, domaine }) {
                                         </IconButton>
                                     </Button>
                                 </label>
-                                <input accept="image/*" className={classes.input} id="icon-button-file" type="file" />
+
                             </div>
                         </Paper>
                     </Grid>
@@ -160,19 +180,20 @@ function BouteilleV({ token, domaine }) {
 
                     <Grid container
                         direction="column"
-                        justify="center"
-                        alignItems="center"
-                        xl={6}
-                        xs={6}
+                        justify="space-between"
+                        alignItems="flex-start"
+                        item xl={3}
+                        item xs={6}
                         style={{ margin: 50 }}>
-                        <Paper className={classes.paper} style={{ marginBottom: 40, padding: 20 }}>
+
+                        <Paper className={classes.paper} style={{ marginLeft: 120, marginBottom: 40, padding: 20 }}>
                             <h2>MA BOUTEILLE</h2>
                             <form style={{ margin: 10 }} className={classes.rootfield} noValidate autoComplete="off">
 
-                                <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-disabled" label={NomRef} placeholder="Nom de la référence" variant="outlined" onChange={(e) => setNomRef(e.target.value)} />
+                                <TextField style={{ margin: 10, width: 500 }} disabled={disabled} id="outlined-disabled" label="Nom de la référence" placeholder="Nom de la référence" defalutValue={NomRef} variant="outlined" onChange={(e) => setNomRef(e.target.value)} />
 
                                 <TextField
-                                    style={{ margin: 10, width: 600 }}
+                                    style={{ margin: 10, width: 500 }}
                                     id="outlined-select-currency"
                                     select
                                     label="Couleur"
@@ -188,13 +209,13 @@ function BouteilleV({ token, domaine }) {
                                     ))}
                                 </TextField>
 
-                                <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label="Cepage" placeholder="Cepage" variant="outlined" onChange={(e) => setCepage(e.target.value)} />
-                                <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label="Appellation" placeholder="Appellation" variant="outlined" onChange={(e) => setAppellation(e.target.value)} />
-                                <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label="Millesime" placeholder="Millesime" variant="outlined" onChange={(e) => setMillesime(e.target.value)} />
+                                <TextField style={{ margin: 10, width: 500 }} disabled={disabled} id="outlined-basic" label="Cepage" placeholder="Cepage" defaultValue="" variant="outlined" onChange={(e) => setCepage(e.target.value)} />
+                                <TextField style={{ margin: 10, width: 500 }} disabled={disabled} id="outlined-basic" label="Appellation" placeholder="Appellation" defaultValue="" variant="outlined" onChange={(e) => setAppellation(e.target.value)} />
+                                <TextField style={{ margin: 10, width: 500 }} disabled={disabled} id="outlined-basic" label="Millesime" placeholder="Millesime" defaultValue="" variant="outlined" onChange={(e) => setMillesime(e.target.value)} />
 
-                                <TextField style={{ margin: 10, width: 600 }} rows={5} disabled={disabled} id="standard-textarea" label="Description" placeholder="Quelques mots sur votre vin, son carractère, ses associations..." onChange={(e) => setDesc(e.target.value)} multiline />
+                                <TextField style={{ margin: 10, width: 500 }} rows={5} disabled={disabled} id="standard-textarea" label="Description" placeholder="Quelques mots sur votre vin, son carractère, ses associations..." defaultValue="" onChange={(e) => setDesc(e.target.value)} multiline />
 
-                                <Button disabled={disabled} color="primary" component="span" onClick={() => { submitInfo(); setNomRef(""); setCouleur(""); setCepage(""); setAppellation(""); setMillesime(""); setDesc("") }}>
+                                <Button disabled={disabled} color="primary" component="span" onClick={() => { submitInfo(); handleOpen() }}>
                                     <h5 style={{ margin: 0 }}>Referencer</h5>
                                     <IconButton disabled={disabled} color="primary" aria-label="upload picture" component="span">
                                         <Done />
@@ -203,7 +224,24 @@ function BouteilleV({ token, domaine }) {
                             </form>
                         </Paper>
                     </Grid>
-
+                    <Modal
+                        aria-labelledby="transition-modal-title"
+                        aria-describedby="transition-modal-description"
+                        className={classes.modal}
+                        open={open}
+                        onClose={handleClose}
+                        closeAfterTransition
+                        BackdropComponent={Backdrop}
+                        BackdropProps={{
+                            timeout: 500,
+                        }}
+                    >
+                        <Fade in={open}>
+                            <div className={classes.papermodal}>
+                                <h5 id="transition-modal-title">Bouteille ajoutée au catalogue</h5>
+                            </div>
+                        </Fade>
+                    </Modal>
                 </Grid>
             </Container>
         </div >
@@ -232,6 +270,17 @@ const useStyles = makeStyles((theme) => ({
             margin: theme.spacing(1),
             width: '25ch',
         },
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    papermodal: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
     },
 }));
 

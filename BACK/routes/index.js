@@ -126,7 +126,7 @@ router.post('/sign-in', async function (req, res, next) {
       Email: req.body.emailFromFront,
     })
 
-    if(!userCaviste){
+    if (!userCaviste) {
       error.push('Email')
     }
 
@@ -165,7 +165,7 @@ router.post('/sign-in', async function (req, res, next) {
   res.json({ result, error, token, status, domaine })
 });
 
-// ---------------------- AJOUTER & SUPPR UNE REF --------------------\\
+// --------------- AJOUTER, SUPPR, MODIF UNE REF ----------------\\
 router.post('/AddVin', async function (req, res, next) {
 
   var error = [];
@@ -194,10 +194,7 @@ router.post('/AddVin', async function (req, res, next) {
   } else {
 
     var imgpath = './tmp/' + uniqid() + '.jpg'
-    console.log("INFO4", imgpath)
     var resultCopy = await image.mv(imgpath);
-    console.log("INFO3", resultCopy)
-
 
     if (!resultCopy) {
       var resultCloudinary = await cloudinary.uploader.upload(imgpath);
@@ -264,9 +261,43 @@ router.delete('/delete-ref/:nom', async function (req, res, next) {
   if (suppr.deletedCount > 0) {
     result = true
   }
-console.log(result)
   res.json({ result })
 });
+//
+router.post('/modif-ref', async function (req, res, next) {
+
+  var bottleinfosFB = JSON.parse(req.body.bottleinfos)
+  
+  var updatebottle = await BouteilleModel.updateOne(
+    { _id: bottleinfosFB._id }, {
+
+    Nom: bottleinfosFB.NomRef,
+    Couleur: bottleinfosFB.Couleur,
+    Cepage: bottleinfosFB.Cepage,
+    Millesime: bottleinfosFB.Millesime,
+    AOC: bottleinfosFB.AOC,
+    Desc: bottleinfosFB.Desc,
+  })
+
+  if (updatebottle) {
+
+  const vigneron = await VigneronModel.findOne({ token: bottleinfosFB.token })
+
+  if (vigneron) {
+
+    var ID = vigneron._id;
+    var cave = await BouteilleModel.find({ IdVigneron: ID })
+      .populate('IdVigneron')
+      .exec();
+
+    if (cave != null) {
+      res.json({ result: true, cave })
+    } else {
+      res.json({ result: false })
+    }
+  }
+}
+})
 
 // ------------------------ INFOS VIGNERON ------------------------ \\
 router.post('/info-update-v', async function (req, res, next) {
@@ -499,8 +530,6 @@ router.post('/info-update-c', async function (req, res, next) {
 
   var userinfosFB = JSON.parse(req.body.userinfos)
   var image = req.files.avatar
-  console.log(userinfosFB)
-  console.log(image);
 
   if (image.size == 0) {
 
@@ -599,17 +628,30 @@ router.get('/catalogue/:token', async function (req, res, next) {
 })
 
 router.post('/filtre', async function (req, res, next) {
+ 
+  var filtre =  req.body.filtreFF
+  var couleur = filtre.split(',')
+  const bouteilles = []
 
-  const filtre = await BouteilleModel.find({ Couleur: req.body.filtreFF })
-  .populate('IdVigneron')
-  .exec()
+  for (i=0; i < couleur.length ; i++) {
 
-  if (filtre != null) {
-    res.json({ result: true, filtre })
-    console.log("FILTRE", filtre)
+    const bouteille = await BouteilleModel.find({ Couleur: couleur[i] })
+    .populate('IdVigneron')
+    .exec()
+
+    if (bouteille) {
+      bouteilles.push(bouteille)
+    }
+    console.log("BOUTEILLE", bouteilles)
+  } 
+
+  if (bouteilles != null) {
+    res.json({ result: true, bouteilles })
+
   } else {
-    res.json({ result: false })
-  }
+
+    res.json({ result: false })}
+
 })
 
 // ---------------- FAVORIS CAVISTE ---------------- \\
@@ -618,7 +660,6 @@ router.post('/add-favoris', async function (req, res, next) {
   const userCaviste = await CavisteModel.findOne({
     token: req.body.tokenFF
   })
-  console.log(req.body.tokenFF)
 
   const bouteille = await BouteilleModel.findOne({
     _id: req.body.IdFF
@@ -631,34 +672,37 @@ router.post('/add-favoris', async function (req, res, next) {
   var tabbouteille = userCaviste.Favoris
   var already = false;
 
-  for (i=0; i <tabbouteille.length;i++){
-  if (tabbouteille[i].Nom === bouteille.Nom) {
-      already = true }}
+  for (i = 0; i < tabbouteille.length; i++) {
+    if (tabbouteille[i].Nom === bouteille.Nom) {
+      already = true
+    }
+  }
 
   if (already == false) {
-   var favorisCaviste = await CavisteModel.updateOne(
-    { token: req.body.tokenFF }, {
-    $push: {
-      Favoris:
-      { 
-        Nom: bouteille.Nom,
-        Couleur: bouteille.Couleur,
-        Millesime: bouteille.Millesime,
-        Cepage: bouteille.Cepage,
-        Desc: bouteille.Desc,
-        AOC: bouteille.AOC,
-        Photo: bouteille.Photo,
+    var favorisCaviste = await CavisteModel.updateOne(
+      { token: req.body.tokenFF }, {
+      $push: {
+        Favoris:
+        {
+          Nom: bouteille.Nom,
+          Couleur: bouteille.Couleur,
+          Millesime: bouteille.Millesime,
+          Cepage: bouteille.Cepage,
+          Desc: bouteille.Desc,
+          AOC: bouteille.AOC,
+          Photo: bouteille.Photo,
 
-        NomVi: vigneron.Nom,
-        RegionVi: vigneron.Region,
-        DescVi: vigneron.Desc,
-        PhotoVi: vigneron.Photo,
-        DomaineVi: vigneron.Domaine,
-        VilleVi : vigneron.Ville
-      },
-    }
-  })}
-  
+          NomVi: vigneron.Nom,
+          RegionVi: vigneron.Region,
+          DescVi: vigneron.Desc,
+          PhotoVi: vigneron.Photo,
+          DomaineVi: vigneron.Domaine,
+          VilleVi: vigneron.Ville
+        },
+      }
+    })
+  }
+
   if (favorisCaviste != null) {
     res.json({ result: true, bouteille, favorisCaviste, userCaviste })
   } else {

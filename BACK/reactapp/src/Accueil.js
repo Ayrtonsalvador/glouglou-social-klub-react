@@ -6,6 +6,8 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 import { Container } from 'reactstrap';
+import Typography from '@material-ui/core/Typography';
+
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -202,11 +204,12 @@ function Accueil({ addStatus, addToken, userstatus, token, addDomaine, domaine }
 
             <Grid container direction="row"
                 justify="center"
-                alignItems="center">
-
-                <img src="GGSCb.png" style={{ width: 500, height: 500, marginRight: 150 }} />
-
-                <Grid item xs={3} direction="colmun" justify="center" alignItems="center">
+                alignItems="center"
+            >
+                <Grid item xs={5} lg={4}>
+                    <img src="GGSCb.png" style={{ width: '80%', marginRight: 150 }} />
+                </Grid>
+                <Grid item xs={5} direction="colmun" justify="center" alignItems="center">
                     <Grid>
                         <AutoPlaySwipeableViews
                             axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -217,7 +220,7 @@ function Accueil({ addStatus, addToken, userstatus, token, addDomaine, domaine }
                             {tutorialSteps.map((step, index) => (
                                 <div style={{ color: "#FFFFFF", paddingBottom: 20, width: 350 }} key={step.id}>
                                     {Math.abs(activeStep - index) <= 2 ? (
-                                        <div> <h2>{step.label}</h2><p style={{ fontSize: 20, marginBottom: 0 }}> {step.para} </p> </div>
+                                        <div> <h2>{step.label}</h2><Typography Wrap style={{ fontSize: 14, marginBottom: 0, display: 'flex', flexWrap: 'wrap' }}> {step.para} </Typography> </div>
                                     ) : null}
                                 </div>
                             ))}
@@ -225,9 +228,9 @@ function Accueil({ addStatus, addToken, userstatus, token, addDomaine, domaine }
                     </Grid>
 
                     <Grid container direction="row" alignItems="center" >
-                   
+
                         <Grid>
-                            <Button style={{ backgroundColor: "#fdd835", color: "#FFFFFF", marginTop: 20, outline: 'none' }} variant="outlined" color="primary"  onClick={handleOpenSignIn} >Connexion</Button>
+                            <Button style={{ backgroundColor: "#fdd835", color: "#FFFFFF", marginTop: 20, outline: 'none' }} variant="outlined" color="primary" onClick={handleOpenSignIn} >Connexion</Button>
                             <Modal
 
                                 aria-labelledby="transition-modal-title"
@@ -251,8 +254,8 @@ function Accueil({ addStatus, addToken, userstatus, token, addDomaine, domaine }
                                         <div className={classes.papermodal} style={{ width: 400, height: 300 }}>
                                             <h5 id="transition-modal-title">J'ai un compte</h5>
 
-                                            <TextField style={{ width: 300, marginBottom: 10, marginTop: 10 }} error={error} id="outlined-basic" label="Email" placeholder="@Glouglou.com" 
-                                            variant="outlined" onChange={(e) => setSignInEmail(e.target.value)} helperText={tabErrorsSignin}/>
+                                            <TextField style={{ width: 300, marginBottom: 10, marginTop: 10 }} error={error} id="outlined-basic" label="Email" placeholder="@Glouglou.com"
+                                                variant="outlined" onChange={(e) => setSignInEmail(e.target.value)} helperText={tabErrorsSignin} />
                                             <FormControl variant="outlined" style={{ width: 300 }} >
                                                 <InputLabel htmlFor="outlined-adornment-password">Mot de passe</InputLabel>
                                                 <OutlinedInput
@@ -278,7 +281,7 @@ function Accueil({ addStatus, addToken, userstatus, token, addDomaine, domaine }
                                                     labelWidth={100}
                                                 />
                                             </FormControl>
-                                            
+
                                             <Button style={{ marginTop: 10, backgroundColor: "#fdd835", color: "#FFFFFF", outline: 'none' }} onClick={() => SubmitSignin()}>OK</Button>
                                         </div>
                                     </Grid>
@@ -286,7 +289,7 @@ function Accueil({ addStatus, addToken, userstatus, token, addDomaine, domaine }
                             </Modal>
                         </Grid>
                         <Grid>
-                        
+
                             <Button style={{ marginLeft: 20, marginTop: 20, color: "#FFFFFF" }} variant="outlined" onClick={handleOpenSignUp}>Je m'inscris</Button>
                             <Modal
                                 aria-labelledby="transition-modal-title"
@@ -342,7 +345,7 @@ function Accueil({ addStatus, addToken, userstatus, token, addDomaine, domaine }
                                             direction="row"
                                             justify="center"
                                             justify="space-around">
-                                            <Button style={{  width: 90, marginTop: 20, backgroundColor: "#fdd835", color: "#FFFFFF", outline: 'none' }} onClick={() => SubmitSignupV()}>VIGNERON</Button>
+                                            <Button style={{ width: 90, marginTop: 20, backgroundColor: "#fdd835", color: "#FFFFFF", outline: 'none' }} onClick={() => SubmitSignupV()}>VIGNERON</Button>
                                             <Button style={{ width: 90, marginTop: 20, backgroundColor: "#fdd835", color: "#FFFFFF", outline: 'none' }} onClick={() => SubmitSignupC()}>CAVISTE</Button>
                                         </Grid>
                                     </div>

@@ -45,13 +45,11 @@ function NavigationV({ addToken }) {
               </Link>
             </Typography>
 
-
             <Link to='/BouteilleV' style={{ textDecoration: 'none', color: "#fdd835", marginRight: 20 }}>
-            <IconButton>
+            <IconButton style={{ outline: 'none' }}>
                 <AddCircleIcon style={{ color: "#fdd835" }} />
                 </IconButton>
             </Link>
-
 
           </div>
           <Button style={{ color: "#fdd835" }} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>

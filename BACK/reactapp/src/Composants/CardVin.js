@@ -37,21 +37,20 @@ function CardVin({ bouteille, token }) {
         coloricon = ""
     }
 
-    //   ${token}
     const addFavoris = async () => {
         setliked(!liked);
 
         var data = await fetch(`/add-favoris`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `IdFF=${bouteille._id}&IdViFF=${bouteille.IdVigneron._id}&tokenFF=47PlPYcfoj7eORElqNzEHYRhWKNRm9vo`
+            body: `IdFF=${bouteille._id}&IdViFF=${bouteille.IdVigneron._id}&tokenFF=${token}`
         })
     }
 
     // -------------MAP CATALOGUE------------- \\  
 
     return (
-        <Grid item xs={6} md={2} xl={2} spacing={2}>
+        <Grid item xs={6} md={4} xl={2} spacing={2} >
             <Card className={classes.root} style={{ margin: 10 }}>
                 <CardHeader
                     id={bouteille._id}

@@ -21,7 +21,7 @@ function Favoris({ token, favoris }) {
         // ${token}
         async function loadData() {
 
-            var rawResponse = await fetch(`/favoris/47PlPYcfoj7eORElqNzEHYRhWKNRm9vo`);
+            var rawResponse = await fetch(`/favoris/${token}`);
             var response = await rawResponse.json();
 
             if (response.result == true) {
@@ -52,7 +52,7 @@ function Favoris({ token, favoris }) {
                 >
                 <NavigationC />
             </Grid>
-            <Container fluid={true} style={{ paddingTop: 90, paddingLeft: 75, backgroundColor: "#f5f5f5", height:'100vh'}}>
+            <Container fluid={true} style={{ paddingTop: 90, paddingLeft: 75, backgroundColor: "#f5f5f5", height:'auto'}}>
             <Grid container   
                     justify="flex-start"
                     alignItems="flex-start"
