@@ -383,10 +383,10 @@ router.get('/info-v/:token', async function (req, res, next) {
 
 // --------------------------------------- Mailbox CAVISTE -------------------------------------- \\
 
-router.get('/mailbox-main', async function (req, res, next) {
+router.get('/mailbox-main/:token', async function (req, res, next) {
 
   var Caviste = await CavisteModel.findOne(
-    { token: req.query.token })
+    { token: req.params.token })
 
   if (Caviste != null) {
     res.json({ Caviste, result: true })
@@ -404,58 +404,55 @@ router.get('/mailbox-read', async function (req, res, next) {
 
 });
 
-router.get('/mailbox-write', async function (req, res, next) {
-
-  var Caviste = await CavisteModel.findOne(
-    { token: req.query.token })
-
-  if (Caviste != null) {
-    res.json({ Caviste, result: true })
-  } else {
-    res.json({ result: false })
-  }
-});
-
 router.post('/mailbox-write', async function (req, res, next) {
 
-  var msg = await CavisteModel.updateOne(
+  var result = flase ;
+  var error = [];
+
+  var searchCaviste = await CavisteModel.findOne({
+    token: req.body.caviste
+  })
+
+  if (searchCaviste != null) {
+  reuslt = true
+
+  var msgtoSend = await CavisteModel.updateOne(
     { token: req.body.token }, {
     $push: {
       MessagesS: {
         Texte: req.body.Texte,
-        Nom: req.body.NomVigneron,
-        Photo: req.body.PhotoFF
+        Nom: searchVigneron.Nom,
+        Photo: searchVigneron.Photo
       }
     }
   });
 
-  var searchVigneron = await VigneronModel.findOne({
-    Nom: req.body.NomVigneron
-  })
-
-  if (searchVigneron != null) {
     var msgVigneron = await VigneronModel.updateOne(
-      { Nom: req.body.NomVigneron }, {
+      { Nom: req.body.vigneron }, {
       $push: {
         MessagesR: {
           Texte: req.body.Texte,
-          Nom: req.body.NomCaviste,
-          Photo: req.body.PhotoFF
+          Nom: msgtoSend.Nom,
+          Photo: msgtoSend.Photo
         }
       }
     });
+  } else {
+    error.push("Cet uilisateur n'existe pas...")
   }
+  console.log("MSG VI", msgVigneron);
+  console.log("MSG CA", msgtoSend);
 
-  res.json({ msg, msgVigneron })
+  res.json({ msgtoSend, msgVigneron, result, error })
 });
 
 // --------------------------------------- Mailbox VIGNERON -------------------------------------- \\
 
 // BOITE DE RECEPTION
-router.get('/mailbox-main-v', async function (req, res, next) {
+router.get('/mailbox-main-v/:token', async function (req, res, next) {
 
   var Vigneron = await VigneronModel.findOne(
-    { token: req.query.token })
+    { token: req.params.token })
 
   if (Vigneron != null) {
     res.json({ Vigneron, result: true })
@@ -477,52 +474,47 @@ router.get('/mailbox-read-v', async function (req, res, next) {
   }
 });
 
-//OK
-router.get('/mailbox-write-v', async function (req, res, next) {
-
-  var Vigneron = await VigneronModel.findOne(
-    { token: req.query.token })
-
-  if (Vigneron != null) {
-    res.json({ Vigneron, result: true })
-  } else {
-    res.json({ result: false })
-  }
-});
-
-// OK
+// ENVOYER
 router.post('/mailbox-write-v', async function (req, res, next) {
 
-  var msg = await VigneronModel.updateOne(
+  var result = false ;
+  var error = [];
+
+  var searchVigneron = await VigneronModel.findOne({
+    token: req.body.vigneron
+  })
+
+  if (searchVigneron != null) {
+
+  result = true
+
+  var msgtoSend = await VigneronModel.updateOne(
     { token: req.body.token }, {
     $push: {
       MessagesS: {
-        Texte: req.body.Texte,
-        Nom: req.body.NomCaviste,
-        Photo: req.body.PhotoFF
+        Texte: req.body.MessageSend,
+        Nom: searchVigneron.Nom,
+        Photo: searchVigneron.Photo
       }
     }
   });
 
-  var searchCaviste = await CavisteModel.findOne({
-    Nom: req.body.NomCaviste
-  })
-
-  if (searchCaviste != null) {
-    var msgCaviste = await CavisteModel.updateOne(
-      { Nom: req.body.NomCaviste }, {
+    var msgVigneron = await CavisteModel.updateOne(
+      { Nom: req.body.vigneron }, {
       $push: {
         MessagesR: {
-          Texte: req.body.Texte,
-          Nom: req.body.NomVigneron,
-          Photo: req.body.PhotoFF
+          Texte: req.body.MessageSend,
+          Nom: msgtoSend.Nom,
+          Photo: msgtoSend.Photo
         }
       }
     });
+  
+  } else {
+    error.push("Cet uilisateur n'existe pas...")
   }
 
-  res.json({ msg, msgCaviste, searchCaviste })
-
+  res.json({ result, error })
 });
 
 // ------------------------- INFOS CAVISTE ------------------------- \\

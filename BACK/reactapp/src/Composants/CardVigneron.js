@@ -80,7 +80,7 @@ export default function CardVigneron({ bouteille, reload, setreload, token }) {
             method: 'post',
             body: data
         })
-  
+
         var response = await newbottles.json();
         console.log('responseFB', response)
 
@@ -98,17 +98,12 @@ export default function CardVigneron({ bouteille, reload, setreload, token }) {
                         title={bouteille._id}
                     />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
-                            {bouteille.Nom}
-                        </Typography>
-                        <Typography gutterBottom variant="h5" component="h2">
-                            {bouteille.Millesime}
-                        </Typography>
-                        <Typography gutterBottom variant="h5" component="h2">
+                        <h5 style={{ marginBottom: 0}}>{bouteille.Nom}</h5>
+                        <p style={{ marginBottom: 0}}>{bouteille.Millesime}</p>
+                        <p style={{ marginBottom: 0}}>{bouteille.AOC}</p>
+
+                        <Typography gutterBottom variant="h6" color="textSecondary" component="p">
                             {bouteille.Cepage}
-                        </Typography>
-                        <Typography gutterBottom variant="h5" component="h2">
-                            {bouteille.AOC}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
                             {bouteille.Desc}
@@ -141,9 +136,9 @@ export default function CardVigneron({ bouteille, reload, setreload, token }) {
                     timeout: 500,
                 }}
             >
-               
+
                 <Fade in={open}>
-                    <div className={classes.paper} style={{ overflow: 'scroll', width: '80%', height: '80%' }}>
+                    <div className={classes.paper} style={{ overflow: 'scroll', width: '80%', height: '80%', display: "flex", flexDirection: "column", alignItems: "center" }}>
                         <h2 id="transition-modal-title">Modifier les informations</h2>
 
 
@@ -175,13 +170,13 @@ export default function CardVigneron({ bouteille, reload, setreload, token }) {
                         <TextField style={{ margin: 10, width: 600 }} rows={3} id="standard-textarea" label="Description" defaultValue={Desc}
                             onChange={(e) => setDesc(e.target.value)} multiline />
 
-                        <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                        <div style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
                             <IconButton style={{ outline: 'none' }} onClick={() => { deleteRef(bouteille.Nom); handleClose() }} aria-label="add to favorites">
                                 <DeleteIcon color="primary" />
                             </IconButton>
-                            <Button style={{ marginRight: 20 }} size="small" color="primary" onClick={() => { modifier(bouteille); handleClose(); setreload(!reload)}}>
+                            <Button style={{ marginRight: 20 }} size="small" color="primary" onClick={() => { modifier(bouteille); handleClose(); setreload(!reload) }}>
                                 Modifier
-                                            <IconButton color="primary" aria-label="upload picture" component="span">
+                            <IconButton color="primary" aria-label="upload picture" component="span">
                                     <Done />
                                 </IconButton>
                             </Button>
@@ -189,7 +184,7 @@ export default function CardVigneron({ bouteille, reload, setreload, token }) {
 
                     </div>
                 </Fade>
-                
+
             </Modal>
 
 
@@ -200,7 +195,7 @@ export default function CardVigneron({ bouteille, reload, setreload, token }) {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 345,
+        maxWidth: 300,
     },
     media: {
         height: 200,

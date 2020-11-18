@@ -17,7 +17,8 @@ import TextField from '@material-ui/core/TextField';
 import { connect } from 'react-redux';
 import AvatarEditor from 'react-avatar-editor'
 
-function ProfilV({ token, AddDomaine }) {
+function ProfilV({ token, AddDomaine}) {
+
     const classes = useStyles();
     const [disabled, setDisabled] = useState(true);
 
@@ -25,14 +26,13 @@ function ProfilV({ token, AddDomaine }) {
     const [domaine, setDomaine] = useState("Domaine")
     const [ville, setVille] = useState("Ville")
     const [region, setRegion] = useState("Région")
-    const [desc, setDesc] = useState("Description")
+    const [desc, setDesc] = useState("Un petit mot sur votre travail !")
 
     const [URLimage, setURLimage] = useState(null)
 
     useEffect(() => {
         async function loadData() {
-            //${token}
-            var rawResponse = await fetch(`/info-v/4gpgPMGHKIOSgVJamz9I5DEg8E3DjyCO`);
+            var rawResponse = await fetch(`/info-v/${token}`);
             var response = await rawResponse.json();
 
             if (response.result == true) {
@@ -118,7 +118,7 @@ function ProfilV({ token, AddDomaine }) {
                         <Paper className={classes.paper}
                             style={{ fontWeight: "bold", marginTop: 65, marginBottom: 40, padding: 20 }}>
                             <h2>MON PROFIL</h2>
-                            <h5 style={{color: "#fdd835"}}>{nom}</h5>
+                            <h5 style={{color: "#fdd835"}}>{domaine}</h5>
                             <FormControlLabel
                                 control={
                                     <Switch
@@ -181,7 +181,7 @@ function ProfilV({ token, AddDomaine }) {
                                 <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label={domaine} placeholder="Nom de domaine" variant="outlined" onChange={(e) => {setDomaine(e.target.value); AddDomaine(domaine)}} />
                                 <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label={region} placeholder="Région" variant="outlined" onChange={(e) => setRegion(e.target.value)} />
                                 <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label={ville} placeholder="Ville" variant="outlined" onChange={(e) => setVille(e.target.value)} />
-                                <TextField style={{ margin: 10, width: 600 }} rows={5} disabled={disabled} id="standard-textarea" label="Description" defaultValue={desc} onChange={(e) => setDesc(e.target.value)} multiline />
+                                <TextField style={{ margin: 10, width: 600 }} rows={5} disabled={disabled} id="standard-textarea" label="Description" placeholder={desc} onChange={(e) => setDesc(e.target.value)} multiline />
 
                                 <Button disabled={disabled} color="primary" component="span" onClick={() => {submitInfo()}}>
                                     <h5 style={{ margin: 0 }}>Editer</h5>

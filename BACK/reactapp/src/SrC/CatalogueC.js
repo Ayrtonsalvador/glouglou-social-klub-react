@@ -15,7 +15,7 @@ function CatalogueC({ token, sendMessage, message, bouteille }) {
     useEffect(() => {
         async function loadData() {
 
-            var rawResponse = await fetch(`/catalogue/${token}`);
+            var rawResponse = await fetch(`/catalogue/DZqJGRGFaQCzabqQtgqYRYuEQPtAeyl1`);
             var response = await rawResponse.json();
 
             if (response.result == true) {

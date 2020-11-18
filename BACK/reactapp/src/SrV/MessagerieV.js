@@ -5,8 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import { Container } from 'reactstrap';
 import { makeStyles } from '@material-ui/core/styles';
 
-import NavigationC from '../Composants/NavigationC';
-import MessageC from '../Composants/MessageC';
+import NavigationV from '../Composants/NavigationV';
+import MessageV from '../Composants/MessageV';
 
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -21,7 +21,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 
-function MessagerieC({ token, message }) {
+function MessagerieV({ token, message }) {
 
     const classes = useStyles();
     const [listMessages, setListMessages] = useState([]);
@@ -32,11 +32,11 @@ function MessagerieC({ token, message }) {
     // Récupérer les messages reçus par le vigneron
     useEffect(() => {
         async function loadData() {
-            var rawResponse = await fetch(`/mailbox-main/${token}`);
+            var rawResponse = await fetch(`/mailbox-main-v/${token}`);
             var response = await rawResponse.json();
 
             if (response.result == true) {
-                setListMessages(response.Caviste.MessagesR)
+                setListMessages(response.Vigneron.MessagesR)
             }
         }
         loadData()
@@ -45,7 +45,7 @@ function MessagerieC({ token, message }) {
 
     return (
         <div>
-            <NavigationC />
+            <NavigationV />
             <Container fluid={true} style={{ padding: 20, paddingTop: 60, width: "100%", height: '100vh', backgroundColor: "#f5f5f5" }}>
 
 
@@ -69,7 +69,7 @@ function MessagerieC({ token, message }) {
 
                         {listMessages.map((msg, i) => {
                             return (
-                                <MessageC key={i} msg={msg} />
+                                <MessageV key={i} msg={msg} />
                             )
                         })}
                     </Grid>
@@ -93,7 +93,7 @@ function MessagerieC({ token, message }) {
 
                             </Card>
                             <Card>
-                
+                    
                             </Card>
                             <Card style={{ outline: 'none', padding: 20, margin: 10 }}>
                                 <CardActions style={{ outline: 'none', paddingLeft: 50, paddingTop: 20 }}>
@@ -108,7 +108,6 @@ function MessagerieC({ token, message }) {
 
                     </Grid>
                 </Grid>
-
             </Container>
         </div >
     );
@@ -140,4 +139,4 @@ function mapStateToProps(state) {
 export default connect(
     mapStateToProps,
     null,
-)(MessagerieC);
+)(MessagerieV);

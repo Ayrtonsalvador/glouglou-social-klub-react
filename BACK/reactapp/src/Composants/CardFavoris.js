@@ -28,6 +28,7 @@ function CardFavoris({ bouteille, token, setdeleted, deleted }) {
         setExpanded(!expanded);
     };
 
+     // -------------DELETE FAVORIS------------ \\  
     const deleteFavoris = async () => {
         var rawResponse = await fetch(`/delete-favoris/${bouteille.Nom}/${token}`, {
             method: 'DELETE'
@@ -39,7 +40,7 @@ function CardFavoris({ bouteille, token, setdeleted, deleted }) {
     // -------------MAP CATALOGUE------------- \\  
 
     return (
-        <Grid item xs={6} md={3} xl={2} spacing={2} >
+       <Grid item xs={6} md={3} xl={2} spacing={2} >
         <Card className={classes.root} style={{ margin: 10 }}>
             <CardHeader
                 id={bouteille._id}
@@ -97,7 +98,7 @@ function CardFavoris({ bouteille, token, setdeleted, deleted }) {
                     <Typography variant="body2" color="textSecondary" component="p">
                         {bouteille.DescVi}
                     </Typography>
-                    <IconButton aria-label="Message">
+                    <IconButton style={{ outline: 'none', color: "#fdd835"}} aria-label="Message">
                         <MessageIcon />
                     </IconButton>
 

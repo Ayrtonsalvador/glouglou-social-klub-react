@@ -103,13 +103,13 @@ function BouteilleV({ token, domaine }) {
     return (
         <div>
             <NavigationV />
-            <Container fluid={true} style={{ padding: 20, paddingTop: 80, width: "100%", height: "100vh", backgroundColor: "#f5f5f5" }}>
+            <Container fluid={true} style={{ paddingTop: 80, width: "100%", height: "100%", backgroundColor: "#f5f5f5" }}>
                 <Grid
                     container
                     direction="row"
                     justify="center"
                     alignItems="flex-start"
-                    wrap="nowrap"
+                    // wrap="nowrap"
                     spacing={6}
                 >
 
@@ -125,7 +125,7 @@ function BouteilleV({ token, domaine }) {
 
 
                         <Paper className={classes.paper}
-                            style={{ fontWeight: "bold", marginTop: 65, marginBottom: 40, padding: 20 }}>
+                            style={{ fontWeight: "bold", marginTop: 65, marginBottom: 40}}>
 
                             <h2>MA CAVE</h2>
                             <h5 style={{ color: "#fdd835" }}>{domaine}</h5>
