@@ -20,7 +20,6 @@ function CaveV({ token, sendMessage, message, bouteille }) {
 
             if (response.result == true) {
                 setlistVin(response.cave);
-                console.log(response.cave);
             }
         }
         loadData()
@@ -33,15 +32,10 @@ function CaveV({ token, sendMessage, message, bouteille }) {
         background = { height: '100vh', paddingTop: 80, paddingLeft: 50, backgroundImage: "url(" + "cavevide.png" + ")",
         backgroundPosition: 'center',
         backgroundSize: '600px 600px',
-        backgroundRepeat: 'no-repeat'
-    }
+        backgroundRepeat: 'no-repeat' }
 
-    console.log(background)
     } else  {
-
-        background = {paddingTop: 80, paddingLeft: 50, height: 'auto', backgroundColor: "#f5f5f5"}
-        console.log(background)
-    
+        background = {paddingTop: 80, paddingLeft: 50, height: 'auto', backgroundColor: "#f5f5f5"}  
     }
 
     return (

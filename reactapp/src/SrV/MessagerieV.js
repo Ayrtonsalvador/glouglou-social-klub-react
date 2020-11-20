@@ -25,9 +25,6 @@ function MessagerieV({ token, message }) {
 
     const classes = useStyles();
     const [listMessages, setListMessages] = useState([]);
-    // const [photo, setPhoto] = useState();
-
-    const [read, setRead] = useState(false);
 
     // Récupérer les messages reçus par le vigneron
     useEffect(() => {
@@ -41,7 +38,6 @@ function MessagerieV({ token, message }) {
         }
         loadData()
     }, []);
-
 
     return (
         <div>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import Grid from '@material-ui/core/Grid';
-
 import { makeStyles } from '@material-ui/core/styles';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
@@ -23,6 +22,7 @@ function MessageC({ token, msg }) {
     const [open, setOpen] = React.useState(false);
     const [MessageSend, setMessageSend] = useState("")
 
+    // MODAL
     const SeeMesssage = () => {
         setOpen(true);
     };
@@ -31,28 +31,27 @@ function MessageC({ token, msg }) {
         setOpen(false);
     };
 
+    // ECRIRE MESSAGE
     const Envoyer = async () => {
-
         var data = await fetch(`mailbox-write`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `MessageSend=${MessageSend}&vigneron=${msg.Nom}&caviste=${token}`
         })
-
         var response = await data.json()
-        console.log("REPOSEFB", response)
         setMessageSend("")
     }
 
-    var split = msg.Texte.split('');
-    if (split.length > 100) {
+    if (msg.Texte !== undefined && msg.Texte.length > 100) {
         var splited = (msg.Texte.slice(0, 100) + "...")
+    } else if (msg.Texte == undefined) {
+        splited = msg.Texte
     }
 
     return (
 
         <Grid>
-            <Card>
+            <Card style={{ margin: 10 }}>
                 <CardActionArea style={{ outline: 'none', padding: 20, maxHeight: 150, overflow: 'Hidden' }} onClick={() => { SeeMesssage(msg) }}>
                     <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', }} >
 
@@ -95,19 +94,10 @@ function MessageC({ token, msg }) {
                                 <ListItemAvatar>
                                     <Avatar src={msg.Photo} />
                                 </ListItemAvatar>
-                                <div container
-                                    direction="column"
-                                    justify="center"
-                                    alignItems="center"
-                                    spacing={6}
-                                >
-                                </div>
+                                <Typography>{msg.Texte}</Typography>
                             </div>
 
                         </Card>
-                            <Card>
-                                <Typography>{MessageSend}</Typography>
-                            </Card>
                         <Card style={{ outline: 'none', padding: 20, margin: 10 }}>
                             <CardActions style={{ outline: 'none', paddingLeft: 50, paddingTop: 20 }}>
                                 <TextField style={{ outline: 'none' }} multiline id="standard-textarea" label="Message" fullWidth onChange={(e) => setMessageSend(e.target.value)} />

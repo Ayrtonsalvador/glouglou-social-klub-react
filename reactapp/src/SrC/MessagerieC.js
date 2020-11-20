@@ -4,32 +4,22 @@ import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import { Container } from 'reactstrap';
 import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import CardActions from '@material-ui/core/CardActions';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
+import Send from '@material-ui/icons/Send';
+import IconButton from '@material-ui/core/IconButton';
+import Card from '@material-ui/core/Card';
 
 import NavigationC from '../Composants/NavigationC';
 import MessageC from '../Composants/MessageC';
-
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import CardActions from '@material-ui/core/CardActions';
-
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-
-import Send from '@material-ui/icons/Send';
-import IconButton from '@material-ui/core/IconButton';
-
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
 
 function MessagerieC({ token, message }) {
 
     const classes = useStyles();
     const [listMessages, setListMessages] = useState([]);
-    // const [photo, setPhoto] = useState();
 
-    const [read, setRead] = useState(false);
-
-    // Récupérer les messages reçus par le vigneron
     useEffect(() => {
         async function loadData() {
             var rawResponse = await fetch(`/mailbox-main/${token}`);

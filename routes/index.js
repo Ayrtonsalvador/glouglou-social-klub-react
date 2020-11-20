@@ -25,7 +25,7 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'GlouGlou Social Club' });
 });
 
-// ---------------------- SIGN-UP --------------------\\
+// ---------------------- SIGN-UP -------------------\\
 router.post('/sign-up', async function (req, res, next) {
   var error = []
   var result = false
@@ -381,7 +381,7 @@ router.get('/info-v/:token', async function (req, res, next) {
   }
 })
 
-// --------------------------------------- Mailbox CAVISTE -------------------------------------- \\
+// ------------------------ Mailbox CAVISTE ----------------------- \\
 
 router.get('/mailbox-main/:token', async function (req, res, next) {
 
@@ -393,15 +393,6 @@ router.get('/mailbox-main/:token', async function (req, res, next) {
   } else {
     res.json({ result: false })
   }
-});
-
-router.get('/mailbox-read', async function (req, res, next) {
-
-  var msgClicked = await CavisteModel.findOne(
-    { MessagesR: { Texte: req.body.Texte } })
-
-  res.json({ msgClicked })
-
 });
 
 router.post('/mailbox-write', async function (req, res, next) {
@@ -440,15 +431,12 @@ router.post('/mailbox-write', async function (req, res, next) {
   } else {
     error.push("Cet uilisateur n'existe pas...")
   }
-  console.log("MSG VI", msgVigneron);
-  console.log("MSG CA", msgtoSend);
 
   res.json({ msgtoSend, msgVigneron, result, error })
 });
 
-// --------------------------------------- Mailbox VIGNERON -------------------------------------- \\
+// --------------------- Mailbox VIGNERON --------------------------- \\
 
-// BOITE DE RECEPTION
 router.get('/mailbox-main-v/:token', async function (req, res, next) {
 
   var Vigneron = await VigneronModel.findOne(
@@ -461,20 +449,6 @@ router.get('/mailbox-main-v/:token', async function (req, res, next) {
   }
 });
 
-// LIRE UN MESSAGE
-router.get('/mailbox-read-v', async function (req, res, next) {
-
-  var Vigneron = await VigneronModel.findOne(
-    { token: req.query.token })
-
-  if (Vigneron != null) {
-    res.json({ Vigneron, result: true })
-  } else {
-    res.json({ result: false })
-  }
-});
-
-// ENVOYER
 router.post('/mailbox-write-v', async function (req, res, next) {
 
   var result = false ;
@@ -517,7 +491,7 @@ router.post('/mailbox-write-v', async function (req, res, next) {
   res.json({ result, error })
 });
 
-// ------------------------- INFOS CAVISTE ------------------------- \\
+// --------------------- INFOS CAVISTE ----------------------- \\
 router.post('/info-update-c', async function (req, res, next) {
 
   var userinfosFB = JSON.parse(req.body.userinfos)
@@ -600,7 +574,7 @@ router.get('/info-c/:token', async function (req, res, next) {
   }
 })
 
-// ------------------------- CATALOGUE CAVISTE ------------------------- \\
+// --------------------- CATALOGUE CAVISTE ------------------- \\
 
 router.get('/catalogue/:token', async function (req, res, next) {
 

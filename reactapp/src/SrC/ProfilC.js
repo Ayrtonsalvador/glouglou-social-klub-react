@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-
-import NavigationC from '../Composants/NavigationC';
-
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 import { Container } from 'reactstrap';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,8 +15,9 @@ import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import Edit from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-
 import AvatarEditor from 'react-avatar-editor'
+
+import NavigationC from '../Composants/NavigationC';
 
 function ProfilC({ token }) {
     const classes = useStyles();
@@ -27,14 +29,13 @@ function ProfilC({ token }) {
     const [region, setRegion] = useState("Région")
     const [desc, setDesc] = useState("Petite description de votre travail!")
 
-    const [URLimage, setURLimage] = useState(null)
+    const [URLimage, setURLimage] = useState("jaune.jpg")
 
     useEffect(() => {
         async function loadData() {
-            //${token}
-            var rawResponse = await fetch(`/info-c/47PlPYcfoj7eORElqNzEHYRhWKNRm9vo`);
+
+            var rawResponse = await fetch(`/info-c/${token}`);
             var response = await rawResponse.json();
-            console.log("CAVISTE", response);
 
             if (response.result == true) {
 
@@ -45,9 +46,7 @@ function ProfilC({ token }) {
                 setDesc(response.user.Desc)
 
                 if (response.user.Photo != null) {
-                setURLimage(response.user.Photo)
-                } else {
-                setURLimage("jaune.jpg")
+                    setURLimage(response.user.Photo)
                 }
             }
         }
@@ -55,7 +54,7 @@ function ProfilC({ token }) {
     }, []);
 
     // CHECKED BUTTON
-    const [state, setState] = React.useState({checked: false});
+    const [state, setState] = React.useState({ checked: false });
     const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
         setDisabled(!disabled)
@@ -67,7 +66,7 @@ function ProfilC({ token }) {
     }
 
     const submitInfo = async () => {
-    
+
         var data = new FormData();
 
         data.append('avatar', URLimage);
@@ -87,17 +86,26 @@ function ProfilC({ token }) {
             method: 'post',
             body: data
         })
-
         var response = await updateUser.json();
-        console.log('responseFB', response)
     }
+
+    // MODAL 
+    const [open, setOpen] = React.useState(false);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return (
         <div>
             <NavigationC />
             <Container fluid={true} style={{ padding: 20, paddingTop: 80, width: "100%", height: '100%', backgroundColor: "#f5f5f5" }}>
 
-            <Grid
+                <Grid
                     container
                     direction="row"
                     justify="center"
@@ -105,7 +113,7 @@ function ProfilC({ token }) {
                     wrap="nowrap"
                 >
 
-<Grid
+                    <Grid
                         container
                         direction="column"
                         justify="flex-start"
@@ -116,10 +124,10 @@ function ProfilC({ token }) {
                     >
 
                         <Paper className={classes.paper}
-                                                        style={{ fontWeight: "bold", marginTop: 65, marginBottom: 40, padding: 20 }}>
+                            style={{ fontWeight: "bold", marginTop: 65, marginBottom: 40, padding: 20 }}>
 
                             <h2>MON PROFIL</h2>
-                            <h5 style={{color: "#fdd835"}}>{nom}</h5>
+                            <h5 style={{ color: "#fdd835" }}>{nom}</h5>
                             <FormControlLabel
                                 control={
                                     <Switch
@@ -155,11 +163,11 @@ function ProfilC({ token }) {
                                     multiple
                                     type="file"
                                     onChange={URL}
-                                    disabled={disabled} 
+                                    disabled={disabled}
                                 />
                                 <label htmlFor="contained-button-file">
                                     <Button disabled={disabled} style={{ margin: 10 }} color="primary" component="span">
-                                        <h5  style={{ margin: 0 }}>Charger</h5>
+                                        <h5 style={{ margin: 0 }}>Charger</h5>
                                         <IconButton disabled={disabled} color="primary" aria-label="upload picture" component="span">
                                             <PhotoCamera />
                                         </IconButton>
@@ -187,14 +195,32 @@ function ProfilC({ token }) {
                                 <TextField style={{ margin: 10, width: 600 }} disabled={disabled} id="outlined-basic" label={ville} placeholder="Ville" variant="outlined" onChange={(e) => setVille(e.target.value)} />
                                 <TextField style={{ margin: 10, width: 600 }} rows={5} disabled={disabled} id="standard-textarea" label="Description" defaultValue={desc} onChange={(e) => setDesc(e.target.value)} multiline />
 
-                                <Button disabled={disabled} color="primary" component="span" onClick={() => {submitInfo()}}>
+                                <Button disabled={disabled} color="primary" component="span" onClick={() => { submitInfo(); handleOpen() }}>
                                     <h5 style={{ margin: 0 }}>Editer</h5>
                                     <IconButton disabled={disabled} color="primary" aria-label="upload picture" component="span">
-                                        <Edit/>
+                                        <Edit />
                                     </IconButton>
                                 </Button>
                             </form>
                         </Paper>
+                        <Modal
+                            aria-labelledby="transition-modal-title"
+                            aria-describedby="transition-modal-description"
+                            className={classes.modal}
+                            open={open}
+                            onClose={handleClose}
+                            closeAfterTransition
+                            BackdropComponent={Backdrop}
+                            BackdropProps={{
+                                timeout: 500,
+                            }}
+                        >
+                            <Fade in={open}>
+                                <div className={classes.papermodal}>
+                                    <h5 id="transition-modal-title">Modification ajoutée</h5>
+                                </div>
+                            </Fade>
+                        </Modal>
                     </Grid>
 
                 </Grid>
@@ -225,6 +251,17 @@ const useStyles = makeStyles((theme) => ({
             margin: theme.spacing(1),
             width: '25ch',
         },
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    papermodal: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
     },
 }));
 

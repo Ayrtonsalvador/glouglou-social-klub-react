@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -24,7 +25,7 @@ import token from '../reducers/token';
 export default function CardVigneron({ bouteille, reload, setreload, token }) {
     const classes = useStyles();
 
-    //-----------SUPPR--------\\
+    // SUPPRIMER
     const deleteRef = async (nom) => {
         await fetch(`/delete-ref/${nom}`, {
             method: 'DELETE'
@@ -32,7 +33,7 @@ export default function CardVigneron({ bouteille, reload, setreload, token }) {
         setreload(!reload)
     }
 
-    //-----------MODAL--------\\
+    // MODAL
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = () => {
@@ -43,8 +44,7 @@ export default function CardVigneron({ bouteille, reload, setreload, token }) {
         setOpen(false);
     };
 
-    //-----------MODIF BOUTEILLE--------\\
-
+    // MODIF BOUTEILLE
     const [NomRef, setNomRef] = useState(bouteille.Nom);
     const [Couleur, setCouleur] = useState(bouteille.Couleur);
     const [Cepage, setCepage] = useState(bouteille.Cepage);
@@ -82,8 +82,6 @@ export default function CardVigneron({ bouteille, reload, setreload, token }) {
         })
 
         var response = await newbottles.json();
-        console.log('responseFB', response)
-
         setreload(!reload)
     }
 
@@ -98,9 +96,9 @@ export default function CardVigneron({ bouteille, reload, setreload, token }) {
                         title={bouteille._id}
                     />
                     <CardContent>
-                        <h5 style={{ marginBottom: 0}}>{bouteille.Nom}</h5>
-                        <p style={{ marginBottom: 0}}>{bouteille.Millesime}</p>
-                        <p style={{ marginBottom: 0}}>{bouteille.AOC}</p>
+                        <h5 style={{ marginBottom: 0 }}>{bouteille.Nom}</h5>
+                        <p style={{ marginBottom: 0 }}>{bouteille.Millesime}</p>
+                        <p style={{ marginBottom: 0 }}>{bouteille.AOC}</p>
 
                         <Typography gutterBottom variant="h6" color="textSecondary" component="p">
                             {bouteille.Cepage}

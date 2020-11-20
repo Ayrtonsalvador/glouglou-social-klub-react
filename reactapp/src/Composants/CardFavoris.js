@@ -1,7 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Grid from '@material-ui/core/Grid';
-
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -17,7 +17,6 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import MessageIcon from '@material-ui/icons/Message';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { connect } from 'react-redux';
 
 function CardFavoris({ bouteille, token, setdeleted, deleted }) {
 
@@ -28,7 +27,7 @@ function CardFavoris({ bouteille, token, setdeleted, deleted }) {
         setExpanded(!expanded);
     };
 
-     // -------------DELETE FAVORIS------------ \\  
+     // DELETE FAVORIS 
     const deleteFavoris = async () => {
         var rawResponse = await fetch(`/delete-favoris/${bouteille.Nom}/${token}`, {
             method: 'DELETE'
@@ -37,8 +36,7 @@ function CardFavoris({ bouteille, token, setdeleted, deleted }) {
         setdeleted(!deleted)
     }
 
-    // -------------MAP CATALOGUE------------- \\  
-
+    // MAP CATALOGUE
     return (
        <Grid item xs={6} md={3} xl={2} spacing={2} >
         <Card className={classes.root} style={{ margin: 10 }}>
@@ -112,7 +110,7 @@ function CardFavoris({ bouteille, token, setdeleted, deleted }) {
 const useStyles = makeStyles((theme) => ({
     media: {
         height: 0,
-        paddingTop: '56.25%', // 16:9
+        paddingTop: '56.25%',
     },
     expand: {
         transform: 'rotate(0deg)',

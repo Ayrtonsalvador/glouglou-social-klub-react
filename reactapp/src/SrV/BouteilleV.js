@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-
-import NavigationV from '../Composants/NavigationV';
-
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-
 import { Container } from 'reactstrap';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -20,13 +17,14 @@ import Done from '@material-ui/icons/Done';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-
-import { connect } from 'react-redux';
 import AvatarEditor from 'react-avatar-editor'
+
+import NavigationV from '../Composants/NavigationV';
 
 function BouteilleV({ token, domaine }) {
     const classes = useStyles();
     const [disabled, setDisabled] = useState(true);
+    const [redirect, setredirect] = useState(false)
 
     const [NomRef, setNomRef] = useState("Non renseigné");
     const [Couleur, setCouleur] = useState("Non renseigné");
@@ -51,8 +49,8 @@ function BouteilleV({ token, domaine }) {
     };
 
     const handleClose = () => {
-        return <Redirect to='/CaveV' />
-        setOpen(false);
+        setOpen(false); 
+        setredirect(true)    
     };
 
     // SELECTED BUTTON
@@ -100,6 +98,11 @@ function BouteilleV({ token, domaine }) {
         setDesc("")
     }
 
+       // REDIRECT 
+       if (redirect) {
+        return <Redirect to='/CaveV' />
+    }
+
     return (
         <div>
             <NavigationV />
@@ -109,7 +112,7 @@ function BouteilleV({ token, domaine }) {
                     direction="row"
                     justify="center"
                     alignItems="flex-start"
-                    // wrap="nowrap"
+                    wrap="nowrap"
                     spacing={6}
                 >
 
@@ -123,9 +126,8 @@ function BouteilleV({ token, domaine }) {
                         item xs={4}
                     >
 
-
                         <Paper className={classes.paper}
-                            style={{ fontWeight: "bold", marginTop: 65, marginBottom: 40}}>
+                            style={{ fontWeight: "bold", marginTop: 65, marginBottom: 40, padding: 20, maxWidth: 400 }}>
 
                             <h2>MA CAVE</h2>
                             <h5 style={{ color: "#fdd835" }}>{domaine}</h5>
@@ -142,12 +144,12 @@ function BouteilleV({ token, domaine }) {
                             />
                         </Paper>
 
-                        <Paper className={classes.paper}
+                        <Paper className={classes.paper} style={{ maxWidth: 400, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}
                         >
                             <AvatarEditor
                                 image={URLimage}
-                                width={400}
-                                height={200}
+                                width={300}
+                                height={150}
                                 border={0}
                                 color={[255, 255, 255, 0.6]}
                                 scale={1.2}
@@ -177,7 +179,6 @@ function BouteilleV({ token, domaine }) {
                         </Paper>
                     </Grid>
 
-
                     <Grid container
                         direction="column"
                         justify="space-between"
@@ -186,7 +187,7 @@ function BouteilleV({ token, domaine }) {
                         item xs={6}
                         style={{ margin: 50 }}>
 
-                        <Paper className={classes.paper} style={{ marginLeft: 120, marginBottom: 40, padding: 20 }}>
+                        <Paper className={classes.paper} style={{ marginBottom: 40, padding: 20 }}>
                             <h2>MA BOUTEILLE</h2>
                             <form style={{ margin: 10 }} className={classes.rootfield} noValidate autoComplete="off">
 
@@ -214,34 +215,35 @@ function BouteilleV({ token, domaine }) {
                                 <TextField style={{ margin: 10, width: 500 }} disabled={disabled} id="outlined-basic" label="Millesime" placeholder="Millesime" defaultValue="" variant="outlined" onChange={(e) => setMillesime(e.target.value)} />
 
                                 <TextField style={{ margin: 10, width: 500 }} rows={5} disabled={disabled} id="standard-textarea" label="Description" placeholder="Quelques mots sur votre vin, son carractère, ses associations..." defaultValue="" onChange={(e) => setDesc(e.target.value)} multiline />
+                                <Button disabled={disabled} color="primary" component="span" onClick={() => { submitInfo(); handleOpen()}}>
 
-                                <Button disabled={disabled} color="primary" component="span" onClick={() => { submitInfo(); handleOpen() }}>
                                     <h5 style={{ margin: 0 }}>Referencer</h5>
                                     <IconButton disabled={disabled} color="primary" aria-label="upload picture" component="span">
                                         <Done />
                                     </IconButton>
                                 </Button>
                             </form>
+                            <Modal
+                                    aria-labelledby="transition-modal-title"
+                                    aria-describedby="transition-modal-description"
+                                    className={classes.modal}
+                                    open={open}
+                                    onClose={ () => {handleClose()}}
+                                    closeAfterTransition
+                                    BackdropComponent={Backdrop}
+                                    BackdropProps={{
+                                        timeout: 500,
+                                    }}
+                                >
+                                    <Fade in={open}>
+                                        <div className={classes.papermodal}>
+                                            <h5 id="transition-modal-title">Bouteille ajoutée au catalogue</h5>
+                                        </div>
+                                    </Fade>
+                                </Modal>
                         </Paper>
+                       
                     </Grid>
-                    <Modal
-                        aria-labelledby="transition-modal-title"
-                        aria-describedby="transition-modal-description"
-                        className={classes.modal}
-                        open={open}
-                        onClose={handleClose}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                            timeout: 500,
-                        }}
-                    >
-                        <Fade in={open}>
-                            <div className={classes.papermodal}>
-                                <h5 id="transition-modal-title">Bouteille ajoutée au catalogue</h5>
-                            </div>
-                        </Fade>
-                    </Modal>
                 </Grid>
             </Container>
         </div >

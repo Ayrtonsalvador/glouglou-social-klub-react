@@ -9,24 +9,7 @@ import Chip from '@material-ui/core/Chip';
 import CancelIcon from '@material-ui/icons/Cancel';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 
-
-const couleurs = [
-  'Rouge',
-  'Blanc',
-  'Bulles',
-  'Rosé',
-];
-
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
 
 export default function MultipleSelect({ listVin, setlistVin, reload, setreload }) {
 
@@ -34,10 +17,17 @@ export default function MultipleSelect({ listVin, setlistVin, reload, setreload 
   const theme = useTheme();
   const [CouleurVin, setCouleurVin] = React.useState([]);
 
+  const couleurs = [
+    'Rouge',
+    'Blanc',
+    'Bulles',
+    'Rosé',
+  ];
+
+  // FILTRE
   const handleChange = async (event) => {
 
     setCouleurVin(event.target.value)
-    console.log(event.target.value)
 
     var rawresponse = await fetch(`/filtre`, {
       method: 'POST',
@@ -45,12 +35,10 @@ export default function MultipleSelect({ listVin, setlistVin, reload, setreload 
       body: `filtreFF=${event.target.value}`
     });
     var response = await rawresponse.json();
-    console.log("responseFB", response);
 
     if (response.result== true) {
     setlistVin(response.Tabfiltre)
-  }
-  }
+  }}
 
      return (
       <Grid container
@@ -83,7 +71,7 @@ export default function MultipleSelect({ listVin, setlistVin, reload, setreload 
             MenuProps={MenuProps}
           >
             {couleurs.map((couleur) => (
-              <MenuItem key={couleur} value={couleur} style={getStyles(couleur, CouleurVin, theme)}>
+              <MenuItem key={couleur} value={couleur}>
                 {couleur}
               </MenuItem>
             ))}

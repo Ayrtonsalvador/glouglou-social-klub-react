@@ -4,11 +4,8 @@ import { Redirect } from 'react-router-dom';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-
 import { Container } from 'reactstrap';
 import Typography from '@material-ui/core/Typography';
-
-
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import SwipeableViews from 'react-swipeable-views';
@@ -29,9 +26,8 @@ function Accueil({ addStatus, addToken, userstatus, token, addDomaine, domaine }
 
     const classes = useStyles();
 
-    // -------------CARROUEL------------- \\
+    // CARROUEL
     const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-
     const tutorialSteps = [
         {
             id: 1,
@@ -51,13 +47,12 @@ function Accueil({ addStatus, addToken, userstatus, token, addDomaine, domaine }
     ];
     const theme = useTheme();
     const [activeStep, setActiveStep] = React.useState(0);
-    const maxSteps = tutorialSteps.length;
 
     const handleStepChange = (step) => {
         setActiveStep(step);
     };
 
-    // -------------MODAL------------- \\
+    // MODAUX SIGNUP SIGNIN
     const [opensignin, setOpenSignIn] = React.useState(false);
     const [opensignup, setOpenSignUp] = React.useState(false);
 
@@ -77,7 +72,7 @@ function Accueil({ addStatus, addToken, userstatus, token, addDomaine, domaine }
         setOpenSignUp(false);
     };
 
-    // -------------INSCRIPTION------------ \\
+    // INSCRIPTION V & C
     const [signUpUsername, setSignUpUsername] = useState('')
     const [signUpEmail, setSignUpEmail] = useState('')
     const [signUpTel, setSignUpTel] = useState('')
@@ -124,7 +119,7 @@ function Accueil({ addStatus, addToken, userstatus, token, addDomaine, domaine }
         }
     }
 
-    // -------------CONNEXION------------- \\
+    // CONNEXION
     const [signInEmail, setSignInEmail] = useState('')
     const [signInPassword, setSignInPassword] = useState('')
 
@@ -175,8 +170,7 @@ function Accueil({ addStatus, addToken, userstatus, token, addDomaine, domaine }
         colorIcon = ""
     }
 
-    // -------------ERREURS------------- \\
-
+    // ERREURS
     const [error, seterror] = useState(false);
 
     var tabErrorsSignin = ErrorsSignin.map((error, i) => {
@@ -187,8 +181,7 @@ function Accueil({ addStatus, addToken, userstatus, token, addDomaine, domaine }
         return (<p key={i} color='#BB1F1F'>{error}</p>)
     })
 
-    // -------------REDIRECT------------- \\       
-
+    // REDIRECT 
     if (userExists && userstatus == "Vigneron") {
         return <Redirect to='/CaveV' />
     }
@@ -431,18 +424,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps,
 )(Accueil);
-
-
-// {/* <FormGroup>
-//         <Label for="exampleEmail">Valid input</Label>
-//         <Input valid />
-//         <FormFeedback valid>Sweet! that name is available</FormFeedback>
-//         <FormText>Example help text that remains unchanged.</FormText>
-//       </FormGroup>
-
-//       <FormGroup>
-//         <Label for="examplePassword">Invalid input</Label>
-//         <Input invalid />
-//         <FormFeedback>Mot de passe oublié ?</FormFeedback>
-//       </FormGroup> */}
-

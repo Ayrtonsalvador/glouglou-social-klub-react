@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container } from 'reactstrap';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom'
+
+import { Container } from 'reactstrap';
+import Grid from '@material-ui/core/Grid';
 
 import NavigationC from '../Composants/NavigationC';
 import CardFavoris from '../Composants/CardFavoris';
@@ -15,7 +13,6 @@ function Favoris({ token, favoris }) {
     const [deleted, setdeleted] = useState(true)
 
     useEffect(() => {
-        // ${token}
         async function loadData() {
 
             var rawResponse = await fetch(`/favoris/${token}`);
@@ -38,15 +35,10 @@ function Favoris({ token, favoris }) {
         background = { height: '100vh', paddingLeft: 75, backgroundImage: "url(" + "cavevide.png" + ")",
         backgroundPosition: 'center',
         backgroundSize: '600px 600px',
-        backgroundRepeat: 'no-repeat'
-    }
+        backgroundRepeat: 'no-repeat'}
 
-    console.log(background)
     } else  {
-
-        background = { paddingTop: 90, paddingLeft: 75, backgroundColor: "#f5f5f5", height:'auto'}
-        console.log(background)
-    
+        background = { paddingTop: 90, paddingLeft: 75, backgroundColor: "#f5f5f5", height:'auto'}    
     }
 
     return (
