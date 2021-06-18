@@ -7,6 +7,7 @@
     "heroku-postbuild": "cd reactapp && npm install && npm run build"
   },
   "dependencies": {
+    "-": "0.0.1",
     "cloudinary": "^1.23.0",
     "cookie-parser": "~1.4.4",
     "crypto-js": "^4.0.0",
@@ -14,9 +15,11 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "express-fileupload": "^1.2.0",
+    "g": "^2.0.1",
     "http-errors": "~1.6.3",
     "mongoose": "^5.10.9",
     "morgan": "~1.9.1",
+    "nodemon": "^2.0.7",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
     "sync-request": "^6.1.0",
